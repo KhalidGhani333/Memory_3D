@@ -1,0 +1,103 @@
+@import "tailwindcss" source(none);
+@source "../src";
+@import "tw-animate-css";
+
+@custom-variant dark (&:is(.dark *));
+
+@import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400&family=Inter:wght@300;400;500;600;700&display=swap');
+
+@theme inline {
+  --font-display: 'Cormorant Garamond', serif;
+  --font-sans: 'Inter', system-ui, sans-serif;
+  --radius-sm: calc(var(--radius) - 4px);
+  --radius-md: calc(var(--radius) - 2px);
+  --radius-lg: var(--radius);
+  --radius-xl: calc(var(--radius) + 4px);
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-card: var(--card);
+  --color-card-foreground: var(--card-foreground);
+  --color-popover: var(--popover);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-secondary: var(--secondary);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-destructive: var(--destructive);
+  --color-destructive-foreground: var(--destructive-foreground);
+  --color-border: var(--border);
+  --color-input: var(--input);
+  --color-ring: var(--ring);
+  --color-gold: var(--gold);
+  --color-gold-soft: var(--gold-soft);
+  --color-ink: var(--ink);
+  --color-crystal: var(--crystal);
+}
+
+:root {
+  --radius: 0.5rem;
+  /* Dark luxury — midnight blue + champagne gold */
+  --background: oklch(0.16 0.025 260);
+  --foreground: oklch(0.97 0.01 90);
+  --ink: oklch(0.10 0.02 260);
+  --card: oklch(0.20 0.028 260);
+  --card-foreground: oklch(0.97 0.01 90);
+  --popover: oklch(0.18 0.025 260);
+  --popover-foreground: oklch(0.97 0.01 90);
+  --primary: oklch(0.82 0.12 82);
+  --primary-foreground: oklch(0.14 0.02 260);
+  --secondary: oklch(0.26 0.03 260);
+  --secondary-foreground: oklch(0.97 0.01 90);
+  --muted: oklch(0.24 0.025 260);
+  --muted-foreground: oklch(0.72 0.02 90);
+  --accent: oklch(0.82 0.12 82);
+  --accent-foreground: oklch(0.14 0.02 260);
+  --destructive: oklch(0.6 0.22 27);
+  --destructive-foreground: oklch(0.97 0.01 90);
+  --border: oklch(0.32 0.025 260 / 0.6);
+  --input: oklch(0.28 0.025 260);
+  --ring: oklch(0.82 0.12 82);
+  --gold: oklch(0.82 0.12 82);
+  --gold-soft: oklch(0.88 0.08 85);
+  --crystal: oklch(0.85 0.05 220);
+
+  --gradient-hero: radial-gradient(ellipse at 50% 0%, oklch(0.28 0.05 260) 0%, oklch(0.13 0.02 260) 70%);
+  --gradient-gold: linear-gradient(135deg, oklch(0.88 0.10 85), oklch(0.75 0.13 78));
+  --gradient-crystal: radial-gradient(circle at 30% 20%, oklch(0.45 0.06 220) 0%, oklch(0.14 0.02 260) 65%);
+  --shadow-luxe: 0 30px 60px -20px oklch(0 0 0 / 0.6), 0 0 80px -20px oklch(0.82 0.12 82 / 0.15);
+  --shadow-gold: 0 10px 40px -10px oklch(0.82 0.12 82 / 0.4);
+}
+
+@layer base {
+  * { border-color: var(--color-border); }
+  html { scroll-behavior: smooth; }
+  body {
+    background-color: var(--color-background);
+    color: var(--color-foreground);
+    font-family: var(--font-sans);
+    font-feature-settings: "ss01", "cv11";
+    -webkit-font-smoothing: antialiased;
+  }
+  h1, h2, h3, h4, .font-display { font-family: var(--font-display); letter-spacing: -0.01em; }
+  ::selection { background: var(--gold); color: var(--ink); }
+}
+
+@layer utilities {
+  .text-gold { color: var(--gold); }
+  .bg-gradient-hero { background: var(--gradient-hero); }
+  .bg-gradient-gold { background: var(--gradient-gold); }
+  .bg-gradient-crystal { background: var(--gradient-crystal); }
+  .shadow-luxe { box-shadow: var(--shadow-luxe); }
+  .shadow-gold { box-shadow: var(--shadow-gold); }
+  .text-gradient-gold {
+    background: var(--gradient-gold);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+  }
+  .hairline { border-top: 1px solid color-mix(in oklab, var(--gold) 30%, transparent); }
+}

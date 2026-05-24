@@ -1,0 +1,437 @@
+import { createFileRoute, Link } from "@tanstack/react-router";
+import { motion } from "framer-motion";
+import { ArrowRight, Sparkles, Heart, Gift, Calendar, Star, Camera, Cog, Truck } from "lucide-react";
+import { Reveal } from "@/components/site/Reveal";
+
+import heroCover from "@/assets/hero_cover.avif";
+import familyCover from "@/assets/Family_Cover.avif";
+import jamesCover from "@/assets/James_Castle-Cover.avif";
+import sculpturesCover from "@/assets/Memory3D_Sculptures.avif";
+import sculpturesCover1 from "@/assets/Memory3D_Sculptures_1.avif";
+
+import c1 from "@/assets/3D_Crystals_1.avif";
+import c2 from "@/assets/3D_Crystals_2.avif";
+import c3 from "@/assets/3D_Crystals_3.avif";
+import c4 from "@/assets/3D_Crystals_4.avif";
+import c5 from "@/assets/3D_Crystals_5.avif";
+import c6 from "@/assets/3D_Crystals_6.avif";
+
+import s1 from "@/assets/3D-Sculp-1.avif";
+import s2 from "@/assets/3D-Sculp-2.avif";
+import s3 from "@/assets/3D-Sculp-3.avif";
+import s4 from "@/assets/3D-Sculp-4.jpg";
+import s5 from "@/assets/3D-Sculp-5.jpg";
+import s6 from "@/assets/3D-Sculp-6.jpg";
+import s7 from "@/assets/3D-Sculp-7.jpg";
+
+import m0 from "@/assets/memory_0.avif";
+import m1 from "@/assets/memory_1.avif";
+import m2 from "@/assets/memory_2.avif";
+import m3 from "@/assets/memory_3.avif";
+import m4 from "@/assets/memory_4.avif";
+import m5 from "@/assets/memory_5.avif";
+import m6 from "@/assets/memory_6.avif";
+import m7 from "@/assets/memory_7.avif";
+import m8 from "@/assets/memory_8.avif";
+import m9 from "@/assets/memory_9.avif";
+
+import pHeart from "@/assets/product-rotating-heart.webp";
+import pSilver from "@/assets/product-lightbase-silver-heart.webp";
+import pKey from "@/assets/product-keychain.webp";
+import pWood from "@/assets/product-wooden-premium.webp";
+
+export const Route = createFileRoute("/")({
+  head: () => ({
+    meta: [
+      { title: "Memory3D — Forever in Crystal | 3D Laser-Engraved Gifts" },
+      { name: "description", content: "Turn your most precious moments into stunning 3D laser-engraved crystals and full-color sculptures. Weddings, memorials, pets and milestones — preserved forever." },
+      { property: "og:title", content: "Memory3D — Forever in Crystal" },
+      { property: "og:description", content: "Premium 3D crystals and sculptures, personalized for the moments that matter." },
+      { property: "og:image", content: heroCover },
+    ],
+  }),
+  component: Home,
+});
+
+const categories = [
+  { title: "Weddings", img: familyCover, to: "/weddings", copy: "The first dance, captured in light." },
+  { title: "Memorials", img: jamesCover, to: "/memorials", copy: "Hold their memory in your hands." },
+  { title: "3D Sculptures", img: sculpturesCover, to: "/sculptures", copy: "Full-color figurines from a single scan." },
+  { title: "Custom Gifts", img: c2, to: "/shop", copy: "Birthdays, anniversaries, milestones." },
+];
+
+const featured = [
+  { img: pHeart, title: "Rotating Heart Crystal", price: 95, tag: "Bestseller" },
+  { img: pSilver, title: "Silver Lightbase Heart", price: 85, tag: "New" },
+  { img: pWood, title: "Wooden Premium Lightbase", price: 145, tag: "Premium" },
+  { img: pKey, title: "Engraved Keychain", price: 35, tag: "Gift" },
+];
+
+const memoryWall = [m0, m1, m2, m3, m4, m5, m6, m7, m8, m9];
+
+const sculptureShots = [s1, s2, s3, s4, s5, s6, s7];
+
+const steps = [
+  { icon: Camera, title: "Scan", body: "We capture you in 12 seconds with our pop-up 3D scanner — or upload a single photo from anywhere." },
+  { icon: Cog, title: "Craft", body: "Master artisans render your model and laser-etch millions of micro-points inside premium optical crystal." },
+  { icon: Truck, title: "Cherish", body: "Hand-inspected, gift-boxed and delivered to your door in 10–14 days. Forever yours." },
+];
+
+function Home() {
+  return (
+    <div className="bg-background overflow-x-hidden">
+      {/* ───────── HERO ───────── */}
+      <section className="relative min-h-screen flex items-end pt-24 pb-20 overflow-hidden">
+        <div className="absolute inset-0">
+          <video 
+            src="/home_cover_vid.mp4" 
+            autoPlay 
+            loop 
+            muted 
+            playsInline 
+            className="w-full h-full object-cover"
+          />
+          <div className="absolute inset-0 bg-gradient-to-t from-background via-background/70 to-background/40" />
+          <div className="absolute inset-0 bg-gradient-to-r from-background/80 via-transparent to-background/30" />
+        </div>
+
+        <div className="relative max-w-7xl mx-auto px-6 lg:px-10 w-full grid lg:grid-cols-12 gap-12 items-end">
+          <div className="lg:col-span-7">
+            <motion.div
+              initial={{ opacity: 0, y: 30 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 1.1, ease: [0.22, 1, 0.36, 1] }}
+            >
+              <div className="flex items-center gap-3 mb-6">
+                <span className="h-px w-10 bg-gold" />
+                <span className="text-[11px] tracking-[0.35em] uppercase text-gold">Premium 3D Crystal Studio</span>
+              </div>
+              <h1 className="font-display text-[clamp(3rem,8vw,7rem)] leading-[0.95] text-foreground">
+                Hold the moment <br />
+                <em className="text-gradient-gold not-italic font-light">forever</em> in crystal.
+              </h1>
+              <p className="mt-8 text-lg md:text-xl text-muted-foreground max-w-xl leading-relaxed font-light">
+                Personalized 3D laser-engraved crystals and full-color sculptures.
+                For weddings, memorials, milestones and everything that mattered enough to keep.
+              </p>
+              <div className="mt-10 flex flex-col sm:flex-row gap-4">
+                <Link
+                  to="/shop"
+                  className="group inline-flex items-center justify-center gap-3 bg-gradient-gold text-primary-foreground px-9 py-4 text-[11px] tracking-[0.3em] uppercase shadow-gold rounded-sm hover:translate-y-[-2px] transition-transform"
+                >
+                  Shop Crystals <ArrowRight className="w-4 h-4 transition-transform group-hover:translate-x-1" />
+                </Link>
+                <Link
+                  to="/contact"
+                  className="inline-flex items-center justify-center gap-3 border border-gold/40 text-foreground px-9 py-4 text-[11px] tracking-[0.3em] uppercase hover:bg-gold/10 hover:border-gold rounded-sm transition"
+                >
+                  Schedule a Scan
+                </Link>
+              </div>
+            </motion.div>
+          </div>
+
+          <div className="lg:col-span-5 hidden lg:block">
+            <motion.div
+              initial={{ opacity: 0, x: 30 }}
+              animate={{ opacity: 1, x: 0 }}
+              transition={{ duration: 1.2, delay: 0.3 }}
+              className="space-y-6 text-right"
+            >
+              <div className="inline-block hairline pt-6">
+                <div className="text-5xl font-display text-gradient-gold">50,000+</div>
+                <p className="text-[11px] tracking-[0.25em] uppercase text-muted-foreground mt-2">Memories carved</p>
+              </div>
+              <div className="inline-block hairline pt-6 ml-8">
+                <div className="text-5xl font-display text-gradient-gold">4.9★</div>
+                <p className="text-[11px] tracking-[0.25em] uppercase text-muted-foreground mt-2">From 12k+ reviews</p>
+              </div>
+            </motion.div>
+          </div>
+        </div>
+
+        <div className="absolute bottom-6 left-1/2 -translate-x-1/2 text-[10px] tracking-[0.4em] text-muted-foreground uppercase">
+          Scroll
+        </div>
+      </section>
+
+      {/* ───────── CATEGORIES ───────── */}
+      <section className="py-32 relative">
+        <div className="max-w-7xl mx-auto px-6 lg:px-10">
+          <Reveal>
+            <div className="text-center max-w-2xl mx-auto mb-20">
+              <span className="text-[11px] tracking-[0.35em] uppercase text-gold">Collections</span>
+              <h2 className="font-display text-5xl md:text-6xl mt-4 text-foreground">
+                A keepsake for every <em className="text-gradient-gold not-italic">chapter</em>.
+              </h2>
+            </div>
+          </Reveal>
+
+          <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
+            {categories.map((cat, i) => (
+              <Reveal key={cat.title} delay={i * 0.08}>
+                <Link to={cat.to} className="group block relative aspect-[3/4] overflow-hidden rounded-sm">
+                  <img src={cat.img} alt={cat.title} className="absolute inset-0 w-full h-full object-cover transition-transform duration-[1500ms] group-hover:scale-110" />
+                  <div className="absolute inset-0 bg-gradient-to-t from-background via-background/30 to-transparent" />
+                  <div className="absolute inset-0 border border-gold/0 group-hover:border-gold/50 transition-colors duration-500" />
+                  <div className="absolute bottom-0 left-0 right-0 p-7">
+                    <h3 className="font-display text-3xl text-foreground mb-2">{cat.title}</h3>
+                    <p className="text-sm text-muted-foreground mb-4">{cat.copy}</p>
+                    <span className="inline-flex items-center gap-2 text-[11px] tracking-[0.25em] uppercase text-gold">
+                      Explore <ArrowRight className="w-3.5 h-3.5 transition-transform group-hover:translate-x-1" />
+                    </span>
+                  </div>
+                </Link>
+              </Reveal>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* ───────── FEATURED PRODUCTS ───────── */}
+      <section className="py-32 bg-gradient-crystal relative">
+        <div className="max-w-7xl mx-auto px-6 lg:px-10">
+          <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 mb-16">
+            <Reveal>
+              <div>
+                <span className="text-[11px] tracking-[0.35em] uppercase text-gold">Featured</span>
+                <h2 className="font-display text-5xl md:text-6xl mt-4 text-foreground max-w-xl">
+                  The pieces everyone's gifting.
+                </h2>
+              </div>
+            </Reveal>
+            <Reveal delay={0.15}>
+              <Link to="/shop" className="text-[11px] tracking-[0.3em] uppercase text-gold inline-flex items-center gap-2 hover:gap-3 transition-all">
+                View all crystals <ArrowRight className="w-4 h-4" />
+              </Link>
+            </Reveal>
+          </div>
+
+          <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-6">
+            {featured.map((p, i) => (
+              <Reveal key={p.title} delay={i * 0.1}>
+                <div className="group">
+                  <div className="relative aspect-square overflow-hidden bg-card border border-border rounded-sm">
+                    <img src={p.img} alt={p.title} className="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" />
+                    <span className="absolute top-4 left-4 text-[10px] tracking-[0.25em] uppercase bg-background/80 backdrop-blur px-3 py-1.5 text-gold rounded-sm">
+                      {p.tag}
+                    </span>
+                  </div>
+                  <div className="pt-5 flex items-start justify-between gap-4">
+                    <h3 className="font-display text-xl text-foreground leading-snug">{p.title}</h3>
+                    <span className="font-display text-xl text-gold whitespace-nowrap">${p.price}</span>
+                  </div>
+                </div>
+              </Reveal>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* ───────── HOW IT WORKS ───────── */}
+      <section className="py-32">
+        <div className="max-w-6xl mx-auto px-6 lg:px-10">
+          <Reveal>
+            <div className="text-center mb-20">
+              <span className="text-[11px] tracking-[0.35em] uppercase text-gold">The Process</span>
+              <h2 className="font-display text-5xl md:text-6xl mt-4">
+                From <em className="text-gradient-gold not-italic">moment</em> to masterpiece.
+              </h2>
+            </div>
+          </Reveal>
+          <div className="grid md:grid-cols-3 gap-12 relative">
+            <div className="hidden md:block absolute top-12 left-[16%] right-[16%] h-px bg-gradient-to-r from-transparent via-gold/40 to-transparent" />
+            {steps.map((s, i) => (
+              <Reveal key={s.title} delay={i * 0.15} className="text-center relative">
+                <div className="relative inline-flex items-center justify-center w-24 h-24 mb-8">
+                  <div className="absolute inset-0 bg-gradient-gold rounded-full opacity-20 blur-xl" />
+                  <div className="relative w-24 h-24 rounded-full border border-gold/40 bg-background grid place-items-center">
+                    <s.icon className="w-8 h-8 text-gold" />
+                    <span className="absolute -top-2 -right-2 w-7 h-7 grid place-items-center rounded-full bg-gradient-gold text-primary-foreground text-xs font-medium">
+                      {i + 1}
+                    </span>
+                  </div>
+                </div>
+                <h3 className="font-display text-3xl mb-3">{s.title}</h3>
+                <p className="text-muted-foreground leading-relaxed max-w-xs mx-auto">{s.body}</p>
+              </Reveal>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* ───────── SCULPTURES BIG FEATURE ───────── */}
+      <section className="py-32 bg-card/40 relative overflow-hidden">
+        <div className="max-w-7xl mx-auto px-6 lg:px-10 grid lg:grid-cols-2 gap-16 items-center">
+          <Reveal>
+            <div>
+              <span className="text-[11px] tracking-[0.35em] uppercase text-gold">Full-color 3D Sculptures</span>
+              <h2 className="font-display text-5xl md:text-6xl mt-4 leading-[1.05]">
+                You. <br /><em className="text-gradient-gold not-italic">In miniature.</em> <br />Down to the last freckle.
+              </h2>
+              <p className="mt-6 text-lg text-muted-foreground leading-relaxed max-w-lg">
+                Step into our scanner. In twelve seconds we capture every detail —
+                your favourite jacket, your dog mid-tail-wag, the way you hold your kid.
+                We then craft a hand-finished, full-color figurine you'll keep on your shelf forever.
+              </p>
+              <div className="mt-8 flex flex-wrap gap-4">
+                <Link to="/sculptures" className="bg-gradient-gold text-primary-foreground px-8 py-4 text-[11px] tracking-[0.3em] uppercase rounded-sm shadow-gold">
+                  Explore Sculptures
+                </Link>
+                <Link to="/contact" className="border border-gold/40 px-8 py-4 text-[11px] tracking-[0.3em] uppercase rounded-sm hover:border-gold transition">
+                  Book a Scan
+                </Link>
+              </div>
+            </div>
+          </Reveal>
+
+          <Reveal delay={0.2}>
+            <div className="grid grid-cols-4 grid-rows-6 gap-3 h-[640px]">
+              <div className="col-span-2 row-span-3 overflow-hidden rounded-sm"><img src={s4} alt="" className="w-full h-full object-cover" /></div>
+              <div className="col-span-2 row-span-2 overflow-hidden rounded-sm"><img src={sculpturesCover1} alt="" className="w-full h-full object-cover" /></div>
+              <div className="col-span-1 row-span-2 overflow-hidden rounded-sm"><img src={s5} alt="" className="w-full h-full object-cover" /></div>
+              <div className="col-span-1 row-span-2 overflow-hidden rounded-sm"><img src={s6} alt="" className="w-full h-full object-cover" /></div>
+              <div className="col-span-2 row-span-3 overflow-hidden rounded-sm"><img src={s7} alt="" className="w-full h-full object-cover" /></div>
+              <div className="col-span-1 row-span-2 overflow-hidden rounded-sm"><img src={s2} alt="" className="w-full h-full object-cover" /></div>
+              <div className="col-span-1 row-span-2 overflow-hidden rounded-sm"><img src={s3} alt="" className="w-full h-full object-cover" /></div>
+            </div>
+          </Reveal>
+        </div>
+      </section>
+
+      {/* ───────── MEMORY WALL ───────── */}
+      <section className="py-32">
+        <div className="max-w-7xl mx-auto px-6 lg:px-10">
+          <Reveal>
+            <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 mb-12">
+              <div>
+                <span className="text-[11px] tracking-[0.35em] uppercase text-gold">The Memory Wall</span>
+                <h2 className="font-display text-5xl md:text-6xl mt-4">A decade of moments.</h2>
+              </div>
+              <p className="text-muted-foreground max-w-sm">
+                Every crystal tells a story. Here are a few of our favourites — from the studio's archive.
+              </p>
+            </div>
+          </Reveal>
+          <div className="columns-2 md:columns-3 lg:columns-5 gap-4 space-y-4">
+            {memoryWall.map((src, i) => (
+              <Reveal key={i} delay={(i % 5) * 0.05} className="break-inside-avoid">
+                <div className="relative overflow-hidden rounded-sm group">
+                  <img src={src} alt="" className="w-full transition-transform duration-700 group-hover:scale-105" />
+                  <div className="absolute inset-0 bg-gradient-to-t from-background/60 to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
+                </div>
+              </Reveal>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* ───────── SCHEDULE VIDEO + CTA ───────── */}
+      <section className="py-32 bg-gradient-hero">
+        <div className="max-w-7xl mx-auto px-6 lg:px-10 grid lg:grid-cols-2 gap-16 items-center">
+          <Reveal>
+            <div className="relative rounded-sm overflow-hidden shadow-luxe aspect-[4/5]">
+              <video
+                src="/schedule_vid.mp4"
+                autoPlay muted loop playsInline
+                className="w-full h-full object-cover"
+              />
+              <div className="absolute top-5 left-5 flex items-center gap-2 bg-background/80 backdrop-blur px-3 py-1.5 rounded-sm text-[10px] tracking-[0.25em] uppercase">
+                <span className="w-1.5 h-1.5 rounded-full bg-gold animate-pulse" /> Live Scan
+              </div>
+            </div>
+          </Reveal>
+          <Reveal delay={0.15}>
+            <div>
+              <span className="text-[11px] tracking-[0.35em] uppercase text-gold">Schedule a Scan</span>
+              <h2 className="font-display text-5xl md:text-6xl mt-4 leading-[1.05]">
+                We're coming to <em className="text-gradient-gold not-italic">your city.</em>
+              </h2>
+              <p className="mt-6 text-lg text-muted-foreground max-w-lg leading-relaxed">
+                Our pop-up 3D scanners travel nationwide. Sessions take twelve seconds.
+                Book a spot for your family, your team, or your wedding party.
+              </p>
+              <ul className="mt-8 space-y-4">
+                {[
+                  { icon: Calendar, t: "Same-day appointments" },
+                  { icon: Heart, t: "Pets, kids, couples — all welcome" },
+                  { icon: Gift, t: "Sculptures and crystals from one scan" },
+                ].map(({ icon: I, t }) => (
+                  <li key={t} className="flex items-center gap-4">
+                    <span className="w-10 h-10 grid place-items-center border border-gold/40 rounded-sm">
+                      <I className="w-4 h-4 text-gold" />
+                    </span>
+                    <span className="text-foreground/90">{t}</span>
+                  </li>
+                ))}
+              </ul>
+              <div className="mt-10">
+                <Link to="/contact" className="inline-flex items-center gap-3 bg-gradient-gold text-primary-foreground px-9 py-4 text-[11px] tracking-[0.3em] uppercase rounded-sm shadow-gold">
+                  Reserve Your Scan <ArrowRight className="w-4 h-4" />
+                </Link>
+              </div>
+            </div>
+          </Reveal>
+        </div>
+      </section>
+
+      {/* ───────── TESTIMONIALS ───────── */}
+      <section className="py-32">
+        <div className="max-w-6xl mx-auto px-6 lg:px-10">
+          <Reveal>
+            <div className="text-center mb-16">
+              <span className="text-[11px] tracking-[0.35em] uppercase text-gold">Loved by thousands</span>
+              <h2 className="font-display text-5xl md:text-6xl mt-4">Words from the keepers.</h2>
+            </div>
+          </Reveal>
+          <div className="grid md:grid-cols-3 gap-6">
+            {[
+              { q: "I cried when I unboxed it. My mother is gone but I see her every morning now. Thank you.", a: "Sarah L." , c: "Memorial Crystal"},
+              { q: "We surprised my husband with a sculpture of him and our daughter. He hasn't moved it from his desk since.", a: "Priya K." , c: "Family Sculpture"},
+              { q: "The wedding crystal was on every guest's mind. Best money we spent on the day, by far.", a: "Marcus & Jen" , c: "Wedding Heart"},
+            ].map((t, i) => (
+              <Reveal key={i} delay={i * 0.1}>
+                <figure className="bg-card border border-border p-8 h-full flex flex-col rounded-sm hover:border-gold/40 transition">
+                  <div className="flex gap-0.5 mb-5">
+                    {Array.from({length: 5}).map((_, i) => <Star key={i} className="w-3.5 h-3.5 fill-gold text-gold" />)}
+                  </div>
+                  <blockquote className="font-display text-xl leading-snug text-foreground/95 flex-1">
+                    "{t.q}"
+                  </blockquote>
+                  <figcaption className="mt-6 pt-6 border-t border-border/60">
+                    <div className="text-sm text-foreground">{t.a}</div>
+                    <div className="text-[10px] tracking-[0.25em] uppercase text-gold mt-1">{t.c}</div>
+                  </figcaption>
+                </figure>
+              </Reveal>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* ───────── FINAL CTA ───────── */}
+      <section className="py-40 relative overflow-hidden">
+        <div className="absolute inset-0 bg-gradient-crystal opacity-60" />
+        <Reveal>
+          <div className="relative max-w-4xl mx-auto px-6 text-center">
+            <Sparkles className="w-10 h-10 text-gold mx-auto mb-6" />
+            <h2 className="font-display text-6xl md:text-8xl leading-[0.95]">
+              Some memories <br />deserve <em className="text-gradient-gold not-italic">forever.</em>
+            </h2>
+            <p className="mt-8 text-lg text-muted-foreground max-w-lg mx-auto">
+              Start with one photo. We'll craft something they'll keep for a lifetime.
+            </p>
+            <div className="mt-10 flex flex-col sm:flex-row justify-center gap-4">
+              <Link to="/shop" className="bg-gradient-gold text-primary-foreground px-10 py-4 text-[11px] tracking-[0.3em] uppercase rounded-sm shadow-gold">
+                Start Your Crystal
+              </Link>
+              <Link to="/contact" className="border border-gold/40 px-10 py-4 text-[11px] tracking-[0.3em] uppercase rounded-sm hover:border-gold transition">
+                Talk to a Specialist
+              </Link>
+            </div>
+          </div>
+        </Reveal>
+      </section>
+    </div>
+  );
+}

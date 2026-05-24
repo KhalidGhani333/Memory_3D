@@ -1,0 +1,63 @@
+import { Link } from "@tanstack/react-router";
+import { Instagram, Facebook, Mail, Phone, MapPin } from "lucide-react";
+import logo from "@/assets/logo.avif";
+
+export function Footer() {
+  return (
+    <footer className="bg-ink text-foreground/90 mt-32">
+      <div className="max-w-7xl mx-auto px-6 lg:px-10 pt-24 pb-12">
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-12 mb-20">
+          <div className="col-span-2 md:col-span-1">
+            <div className="mb-6">
+              <img src={logo} alt="Memory3D Logo" className="h-12 w-auto" />
+            </div>
+            <p className="text-sm text-muted-foreground leading-relaxed max-w-xs">
+              Capturing your most precious moments inside premium laser-engraved crystal.
+            </p>
+          </div>
+
+          <div>
+            <h4 className="text-[11px] tracking-[0.25em] uppercase text-gold mb-5">Shop</h4>
+            <ul className="space-y-3 text-sm text-muted-foreground">
+              <li><Link to="/shop" className="hover:text-gold">All Crystals</Link></li>
+              <li><Link to="/sculptures" className="hover:text-gold">3D Sculptures</Link></li>
+              <li><Link to="/weddings" className="hover:text-gold">Weddings</Link></li>
+              <li><Link to="/memorials" className="hover:text-gold">Memorials</Link></li>
+            </ul>
+          </div>
+
+          <div>
+            <h4 className="text-[11px] tracking-[0.25em] uppercase text-gold mb-5">Company</h4>
+            <ul className="space-y-3 text-sm text-muted-foreground">
+              <li><Link to="/about" className="hover:text-gold">About</Link></li>
+              <li><Link to="/contact" className="hover:text-gold">Contact</Link></li>
+              <li><Link to="/contact" className="hover:text-gold">Schedule a Scan</Link></li>
+            </ul>
+          </div>
+
+          <div>
+            <h4 className="text-[11px] tracking-[0.25em] uppercase text-gold mb-5">Studio</h4>
+            <ul className="space-y-3 text-sm text-muted-foreground">
+              <li className="flex items-start gap-2"><MapPin className="w-3.5 h-3.5 mt-1 text-gold" /> Nationwide pop-up scans</li>
+              <li className="flex items-start gap-2"><Mail className="w-3.5 h-3.5 mt-1 text-gold" /> hello@memory3d.com</li>
+              <li className="flex items-start gap-2"><Phone className="w-3.5 h-3.5 mt-1 text-gold" /> (555) 010-3DXX</li>
+            </ul>
+            <div className="flex gap-3 mt-5">
+              <a aria-label="Instagram" href="#" className="w-9 h-9 grid place-items-center border border-border hover:border-gold hover:text-gold transition rounded-sm">
+                <Instagram className="w-4 h-4" />
+              </a>
+              <a aria-label="Facebook" href="#" className="w-9 h-9 grid place-items-center border border-border hover:border-gold hover:text-gold transition rounded-sm">
+                <Facebook className="w-4 h-4" />
+              </a>
+            </div>
+          </div>
+        </div>
+
+        <div className="hairline pt-8 flex flex-col md:flex-row items-center justify-between gap-4 text-xs text-muted-foreground">
+          <p>© {new Date().getFullYear()} Memory3D. Forever in crystal.</p>
+          <p className="tracking-[0.2em] uppercase">Premium · Personalized · Forever</p>
+        </div>
+      </div>
+    </footer>
+  );
+}
