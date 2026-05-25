@@ -4,16 +4,20 @@ import logo from "@/assets/logo.avif";
 
 export function Footer() {
   return (
-    <footer className="bg-black text-foreground/90 mt-32 border-t border-white/5">
+    <footer className="bg-card border-t border-border mt-32">
       <div className="max-w-7xl mx-auto px-6 lg:px-10 pt-24 pb-12">
         <div className="grid grid-cols-2 md:grid-cols-4 gap-12 mb-20">
+          {/* Brand */}
           <div className="col-span-2 md:col-span-1">
             <div className="mb-6">
-              <img 
-                src={logo} 
-                alt="Memory3D Logo" 
-                className="h-12 w-auto" 
-                style={{ filter: 'invert(82%) sepia(23%) saturate(1141%) hue-rotate(352deg) brightness(92%) contrast(92%)' }}
+              <img
+                src={logo}
+                alt="Memory3D Logo"
+                className="h-12 w-auto"
+                style={{
+                  filter:
+                    "invert(42%) sepia(55%) saturate(600%) hue-rotate(5deg) brightness(85%) contrast(90%)",
+                }}
               />
             </div>
             <p className="text-sm text-muted-foreground leading-relaxed max-w-xs">
@@ -21,78 +25,90 @@ export function Footer() {
             </p>
           </div>
 
+          {/* Shop links */}
           <div>
-            <h4 className="text-[11px] tracking-[0.25em] uppercase text-gold mb-5">Shop</h4>
+            <h4 className="text-[11px] tracking-[0.25em] uppercase text-gold mb-5 font-semibold">
+              Shop
+            </h4>
             <ul className="space-y-3 text-sm text-muted-foreground">
               <li>
-                <Link to="/shop" className="hover:text-gold">
-                  All Crystals
+                <Link to="/shop" className="hover:text-gold transition-colors">
+                  All Products
                 </Link>
               </li>
               <li>
-                <Link to="/sculptures" className="hover:text-gold">
-                  3D Sculptures
-                </Link>
-              </li>
-              <li>
-                <Link to="/weddings" className="hover:text-gold">
+                <Link to="/weddings" className="hover:text-gold transition-colors">
                   Weddings
                 </Link>
               </li>
               <li>
-                <Link to="/memorials" className="hover:text-gold">
+                <Link to="/memorials" className="hover:text-gold transition-colors">
                   Memorials
+                </Link>
+              </li>
+              <li>
+                <Link to="/sculptures" className="hover:text-gold transition-colors">
+                  3D Sculptures
                 </Link>
               </li>
             </ul>
           </div>
 
+          {/* Company links */}
           <div>
-            <h4 className="text-[11px] tracking-[0.25em] uppercase text-gold mb-5">Company</h4>
+            <h4 className="text-[11px] tracking-[0.25em] uppercase text-gold mb-5 font-semibold">
+              Company
+            </h4>
             <ul className="space-y-3 text-sm text-muted-foreground">
               <li>
-                <Link to="/about" className="hover:text-gold">
-                  About
+                <Link to="/about" className="hover:text-gold transition-colors">
+                  About Us
                 </Link>
               </li>
               <li>
-                <Link to="/contact" className="hover:text-gold">
-                  Contact
+                <Link to="/contact" className="hover:text-gold transition-colors">
+                  Contact Us
                 </Link>
               </li>
               <li>
-                <Link to="/contact" className="hover:text-gold">
+                <Link to="/contact" className="hover:text-gold transition-colors">
                   Schedule a Scan
                 </Link>
               </li>
             </ul>
           </div>
 
+          {/* Studio info */}
           <div>
-            <h4 className="text-[11px] tracking-[0.25em] uppercase text-gold mb-5">Studio</h4>
+            <h4 className="text-[11px] tracking-[0.25em] uppercase text-gold mb-5 font-semibold">
+              Studio
+            </h4>
             <ul className="space-y-3 text-sm text-muted-foreground">
               <li className="flex items-start gap-2">
-                <MapPin className="w-3.5 h-3.5 mt-1 text-gold" /> Nationwide pop-up scans
+                <MapPin className="w-3.5 h-3.5 mt-1 text-gold shrink-0" />
+                Nationwide pop-up scans
               </li>
               <li className="flex items-start gap-2">
-                <Mail className="w-3.5 h-3.5 mt-1 text-gold" /> support@memory3d.com
+                <Mail className="w-3.5 h-3.5 mt-1 text-gold shrink-0" />
+                support@memory3d.com
               </li>
               <li className="flex items-start gap-2">
-                <Phone className="w-3.5 h-3.5 mt-1 text-gold" /> 888-936-3667
+                <Phone className="w-3.5 h-3.5 mt-1 text-gold shrink-0" />
+                888-936-3667
               </li>
             </ul>
-            <div className="flex gap-3 mt-5">
+            <div className="flex gap-3 mt-6">
               <a
                 aria-label="Instagram"
                 href="#"
-                className="w-9 h-9 grid place-items-center border border-border hover:border-gold hover:text-gold transition rounded-sm"
+                className="w-9 h-9 grid place-items-center border border-border hover:border-gold hover:text-gold transition rounded-sm text-muted-foreground"
               >
                 <Instagram className="w-4 h-4" />
               </a>
               <a
                 aria-label="Facebook"
                 href="#"
-                className="w-9 h-9 grid place-items-center border border-border hover:border-gold hover:text-gold transition rounded-sm"
+                className="w-9 h-9 grid place-items-center border border-border hover:border-gold hover:text-gold transition rounded-sm text-muted-foreground"
               >
                 <Facebook className="w-4 h-4" />
               </a>

@@ -21,7 +21,7 @@ export function SizeSelector({ sizes, selectedSizeId, onSizeChange }: SizeSelect
           className={`relative p-5 text-left transition-all border-2 rounded-sm flex flex-col justify-between h-full group ${
             selectedSizeId === size.id
               ? "border-gold bg-gold/5 shadow-gold/10 shadow-lg"
-              : "border-border hover:border-gold/30 bg-card/30"
+              : "border-border hover:border-gold/30 bg-card/60"
           }`}
         >
           <div>
@@ -36,8 +36,8 @@ export function SizeSelector({ sizes, selectedSizeId, onSizeChange }: SizeSelect
             </div>
 
             <div className="flex items-center gap-2 text-[10px] text-muted-foreground mb-1">
-              <Users className="w-3 h-3 text-gold/60" />
-              <span>{size.people} People</span>
+              <Users className="w-3 h-3 text-gold/60 shrink-0" />
+              <span>{size.people} {size.people === "1" ? "Person" : "People"}</span>
             </div>
 
             <div className="text-[10px] text-muted-foreground leading-tight italic">
@@ -45,9 +45,13 @@ export function SizeSelector({ sizes, selectedSizeId, onSizeChange }: SizeSelect
             </div>
           </div>
 
-          <div className="mt-6 flex items-end justify-between">
-            <div className="font-display text-2xl text-gold font-bold">$0.00</div>
-            {selectedSizeId === size.id && <CheckCircle className="w-5 h-5 text-gold" />}
+          <div className="mt-5 flex items-end justify-between">
+            <div className="font-display text-2xl text-gold font-bold">
+              ${size.price}
+            </div>
+            {selectedSizeId === size.id && (
+              <CheckCircle className="w-5 h-5 text-gold" />
+            )}
           </div>
         </motion.button>
       ))}

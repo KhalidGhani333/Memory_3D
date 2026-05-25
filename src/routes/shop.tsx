@@ -1,17 +1,9 @@
-import { createFileRoute, Link } from "@tanstack/react-router";
-import { useState, useCallback, useMemo } from "react";
-import { shapes, addons, type Shape, type Size } from "@/data/products";
-import { ShapeSelector } from "@/components/shop/ShapeSelector";
-import { SizeSelector } from "@/components/shop/SizeSelector";
-import { PhotoUpload } from "@/components/shop/PhotoUpload";
-import { AddonList } from "@/components/shop/AddonList";
-import { CustomerForm } from "@/components/shop/CustomerForm";
-import { TotalBar } from "@/components/shop/TotalBar";
-import { calculateTotal } from "@/components/shop/PriceCalculator";
+import { createFileRoute, Link, Outlet, useRouterState } from "@tanstack/react-router";
+import { useState, useMemo } from "react";
+import { motion, AnimatePresence } from "framer-motion";
+import { ArrowRight, SlidersHorizontal, ChevronRight } from "lucide-react";
+import { shapes } from "@/data/products";
 import { Reveal } from "@/components/site/Reveal";
-import { Mail, Phone } from "lucide-react";
-import { useCart } from "@/hooks/use-cart";
-import { toast } from "sonner";
 
 export const Route = createFileRoute("/shop")({
   head: () => ({
@@ -20,263 +12,324 @@ export const Route = createFileRoute("/shop")({
       {
         name: "description",
         content:
-          "Create your stunning 3D gift from any photo. Pick your shape, size, and customize forever.",
+          "Browse all premium 3D laser-engraved crystal gifts. Crystals, keychains, ornaments, pet memorials and more — all made from your photo.",
       },
     ],
   }),
-  component: ShopPage,
+  component: ShopWrapper,
 });
 
-function ShopPage() {
-  const { addItem } = useCart();
-  const [selectedShape, setSelectedShape] = useState<Shape>(shapes[0]);
-  const [selectedSize, setSelectedSize] = useState<Size>(shapes[0].sizes[0]);
-  const [uploadedPhoto, setUploadedPhoto] = useState<File | null>(null);
-  const [selectedAddons, setSelectedAddons] = useState<
-    Record<string, { checked: boolean; qty: number }>
-  >({});
-  const [inscriptionText, setInscriptionText] = useState("");
-  const [shippingPrice, setShippingPrice] = useState(0);
-  const [formData, setFormData] = useState<any>({});
+/* ─── Metadata for each product ─── */
+const productMeta: Record<
+  string,
+  { category: "crystal" | "keychain" | "pet" | "lamp"; description: string; badge?: string }
+> = {
+  "rectangle-tall": {
+    category: "crystal",
+    description: "Classic portrait format — perfect for individuals or couples.",
+    badge: "Most Popular",
+  },
+  "rectangle-wide": {
+    category: "crystal",
+    description: "Landscape format — ideal for groups and family panoramas.",
+  },
+  heart: {
+    category: "crystal",
+    description: "Romantic heart shape — our top-selling wedding keepsake.",
+    badge: "Bestseller",
+  },
+  prestige: {
+    category: "crystal",
+    description: "Elegant beveled crystal with a premium angled finish.",
+    badge: "Premium",
+  },
+  ball: {
+    category: "crystal",
+    description: "Spherical optical crystal that stuns from every angle.",
+  },
+  "cut-corner-diamond": {
+    category: "crystal",
+    description: "Diamond cut with signature angled corners — great value.",
+    badge: "Great Value",
+  },
+  candle: {
+    category: "crystal",
+    description: "Cylindrical crystal that glows beautifully with any lightbase.",
+  },
+  urn: {
+    category: "crystal",
+    description: "Memorial urn with 3D engraved portrait — forever cherished.",
+  },
+  "notched-tall": {
+    category: "crystal",
+    description: "Tall crystal with a distinctive notched top — modern look.",
+  },
+  "notched-wide": {
+    category: "crystal",
+    description: "Wide-format notched crystal — great for landscape photos.",
+  },
+  "desk-lamp": {
+    category: "lamp",
+    description: "Crystal integrated into an elegant illuminated desk lamp.",
+  },
+  ornament: {
+    category: "crystal",
+    description: "Holiday ornament — a perfect seasonal crystal keepsake.",
+    badge: "Seasonal",
+  },
+  "vertical-keychain": {
+    category: "keychain",
+    description: "Carry your cherished memory everywhere you go.",
+    badge: "Gift Idea",
+  },
+  "horizontal-keychain": {
+    category: "keychain",
+    description: "Horizontal crystal keychain — sleek and modern.",
+  },
+  "heart-keychain": {
+    category: "keychain",
+    description: "Heart-shaped crystal on a keychain — the perfect small gift.",
+  },
+  "heart-necklace": {
+    category: "keychain",
+    description: "Wearable crystal heart necklace pendant — wear your memory.",
+  },
+  "dog-bone-vertical": {
+    category: "pet",
+    description: "Vertical dog bone crystal — honour your beloved pet.",
+  },
+  "dog-bone-horizontal": {
+    category: "pet",
+    description: "Horizontal dog bone crystal — a touching pet memorial.",
+  },
+};
 
-  const handleShapeChange = useCallback((shape: Shape) => {
-    setSelectedShape(shape);
-    setSelectedSize(shape.sizes[0]);
-    // Reset configurations when shape changes to avoid confusion
-    setSelectedAddons({});
-    setInscriptionText("");
-  }, []);
+const FILTERS = [
+  { key: "all", label: "All Products" },
+  { key: "crystal", label: "Crystals" },
+  { key: "keychain", label: "Keychains & Jewelry" },
+  { key: "pet", label: "Pet Memorials" },
+  { key: "lamp", label: "Desk Lamps" },
+] as const;
 
-  const totals = useMemo(
-    () =>
-      calculateTotal({
-        sizePrice: selectedSize.price,
-        selectedAddons,
-        addons,
-        inscriptionText,
-        shippingPrice,
-      }),
-    [selectedSize, selectedAddons, inscriptionText, shippingPrice],
-  );
+type FilterKey = (typeof FILTERS)[number]["key"];
 
-  const missingFields = useMemo(() => {
-    const fields = [];
-    if (!uploadedPhoto) fields.push("photo");
-    if (!formData.name) fields.push("Full Name");
-    return fields;
-  }, [uploadedPhoto, formData]);
+/* ─── Wrapper: renders catalog at /shop, child route at /shop/$productId ─── */
+function ShopWrapper() {
+  const state = useRouterState();
+  const pathname = state.location.pathname;
 
-  const isReady = missingFields.length === 0;
+  // If we're on exactly /shop or /shop/ → show the catalog
+  // If we're deeper (e.g. /shop/heart) → render the child route via Outlet
+  const isExact = pathname === "/shop" || pathname === "/shop/";
 
-  const handleAddToCart = () => {
-    addItem({
-      id: crypto.randomUUID(),
-      shapeId: selectedShape.id,
-      shapeLabel: selectedShape.label,
-      sizeId: selectedSize.id,
-      sizeLabel: selectedSize.label,
-      price: 0, // Keeping at 0 as requested for display
-      photo: uploadedPhoto ? URL.createObjectURL(uploadedPhoto) : "",
-      addons: addons
-        .filter((a) => selectedAddons[a.id]?.checked)
-        .map((a) => ({
-          id: a.id,
-          label: a.label,
-          price: a.price,
-          qty: selectedAddons[a.id]?.qty || 1,
-        })),
-      inscriptionText,
-      quantity: 1,
-    });
+  if (isExact) {
+    return <ShopCatalog />;
+  }
+  return <Outlet />;
+}
 
-    toast.success("Order added to cart! We'll review your photo shortly.");
+function ShopCatalog() {
+  const [activeFilter, setActiveFilter] = useState<FilterKey>("all");
+
+  const filtered = useMemo(() => {
+    if (activeFilter === "all") return shapes;
+    return shapes.filter((s) => productMeta[s.id]?.category === activeFilter);
+  }, [activeFilter]);
+
+  const getStartingPrice = (shapeId: string) => {
+    const shape = shapes.find((s) => s.id === shapeId);
+    if (!shape) return 0;
+    return Math.min(...shape.sizes.map((s) => s.price));
   };
 
   return (
-    <div className="bg-background min-h-screen pt-32 pb-24">
-      <main className="max-w-2xl mx-auto px-6 lg:px-8">
-        {/* Header Banner */}
-        <Reveal>
-          <div className="relative overflow-hidden py-12 mb-16 text-center border-y border-gold/20 bg-card/30 backdrop-blur-sm">
-            <div className="absolute inset-0 bg-gradient-to-r from-gold/5 via-transparent to-gold/5" />
-            <div className="relative z-10">
-              <h1 className="text-[20px] md:text-[26px] font-display font-bold uppercase tracking-[0.5em] text-gradient-gold">
-                Stunning 3D Gift
-              </h1>
-              <div className="flex items-center justify-center gap-4 mt-3">
-                <div className="h-[1px] w-8 bg-gold/30" />
-                <p className="text-muted-foreground uppercase text-[10px] tracking-[0.4em] font-medium">
-                  Made From Your Photo
+    <div className="bg-background min-h-screen">
+      {/* ───────── PAGE HERO ───────── */}
+      <section className="pt-36 pb-16 bg-gradient-hero border-b border-border">
+        <div className="max-w-7xl mx-auto px-6 lg:px-10">
+          <Reveal>
+            {/* Breadcrumb */}
+            <nav className="flex items-center gap-2 text-[10px] tracking-[0.25em] uppercase text-muted-foreground mb-8">
+              <Link to="/" className="hover:text-gold transition-colors">
+                Home
+              </Link>
+              <ChevronRight className="w-3 h-3" />
+              <span className="text-gold">Shop</span>
+            </nav>
+
+            <div className="flex flex-col md:flex-row md:items-end justify-between gap-6">
+              <div>
+                <span className="text-[11px] tracking-[0.35em] uppercase text-gold font-medium">
+                  Our Collection
+                </span>
+                <h1 className="font-display text-5xl md:text-7xl mt-3 leading-[0.95] text-foreground">
+                  All Products
+                </h1>
+                <p className="mt-4 text-lg text-muted-foreground max-w-xl font-light">
+                  Choose your shape, upload your photo, select your size — we'll craft it into a
+                  stunning 3D laser-engraved keepsake.
                 </p>
-                <div className="h-[1px] w-8 bg-gold/30" />
+              </div>
+              <div className="text-right hidden md:block">
+                <div className="font-display text-5xl text-gradient-gold">{shapes.length}</div>
+                <p className="text-[11px] tracking-[0.25em] uppercase text-muted-foreground mt-1">
+                  Products available
+                </p>
               </div>
             </div>
+          </Reveal>
+        </div>
+      </section>
+
+      {/* ───────── FILTER TABS ───────── */}
+      <div className="sticky top-20 z-30 bg-white/95 backdrop-blur-lg border-b border-border shadow-sm">
+        <div className="max-w-7xl mx-auto px-6 lg:px-10">
+          <div className="flex items-center gap-1 overflow-x-auto no-scrollbar py-4">
+            <SlidersHorizontal className="w-4 h-4 text-gold mr-3 shrink-0" />
+            {FILTERS.map((f) => (
+              <button
+                key={f.key}
+                onClick={() => setActiveFilter(f.key)}
+                className={`shrink-0 px-5 py-2 text-[10px] tracking-[0.2em] uppercase font-bold rounded-sm transition-all ${
+                  activeFilter === f.key
+                    ? "bg-gradient-gold text-white shadow-gold"
+                    : "text-muted-foreground hover:text-foreground hover:bg-muted border border-transparent hover:border-border"
+                }`}
+              >
+                {f.label}
+                <span
+                  className={`ml-2 text-[9px] opacity-70 ${activeFilter === f.key ? "text-white/80" : "text-muted-foreground"}`}
+                >
+                  {f.key === "all"
+                    ? shapes.length
+                    : shapes.filter((s) => productMeta[s.id]?.category === f.key).length}
+                </span>
+              </button>
+            ))}
           </div>
-        </Reveal>
+        </div>
+      </div>
 
-        {/* 1. Shape Selection */}
-        <section className="mb-20">
-          <Reveal delay={0.1}>
-            <h2 className="text-gold font-bold uppercase tracking-[0.3em] text-center mb-10 text-[12px] flex items-center justify-center gap-3">
-              <span className="h-px w-8 bg-gold/30" />
-              1. Select Shape
-              <span className="h-px w-8 bg-gold/30" />
-            </h2>
-            <ShapeSelector
-              shapes={shapes}
-              selectedShapeId={selectedShape.id}
-              onShapeChange={handleShapeChange}
-            />
-          </Reveal>
-        </section>
+      {/* ───────── PRODUCT GRID ───────── */}
+      <section className="py-16 pb-32">
+        <div className="max-w-7xl mx-auto px-6 lg:px-10">
+          <AnimatePresence mode="wait">
+            <motion.div
+              key={activeFilter}
+              initial={{ opacity: 0, y: 12 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: -8 }}
+              transition={{ duration: 0.3 }}
+              className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-5 md:gap-6"
+            >
+              {filtered.map((shape, i) => {
+                const meta = productMeta[shape.id];
+                const startingPrice = getStartingPrice(shape.id);
 
-        {/* 2. Size Selection */}
-        <section className="mt-16">
-          <Reveal delay={0.2}>
-            <h2 className="text-gold font-bold uppercase tracking-[0.3em] text-center mb-8 text-[12px]">
-              2. Choose Size
-            </h2>
-            <SizeSelector
-              key={selectedShape.id}
-              sizes={selectedShape.sizes}
-              selectedSizeId={selectedSize.id}
-              onSizeChange={setSelectedSize}
-            />
-          </Reveal>
-        </section>
+                return (
+                  <motion.div
+                    key={shape.id}
+                    initial={{ opacity: 0, y: 20 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ delay: i * 0.04, duration: 0.4 }}
+                    className="group"
+                  >
+                    <Link to={`/shop/${shape.id}`} className="block">
+                      {/* Product Image */}
+                      <div className="relative aspect-square overflow-hidden bg-card border border-border rounded-sm shadow-sm group-hover:shadow-gold group-hover:border-gold/40 transition-all duration-500">
+                        <div className="absolute inset-0 flex items-center justify-center p-6">
+                          <img
+                            src={shape.thumbImage}
+                            alt={shape.label}
+                            className="max-w-full max-h-full object-contain transition-transform duration-700 group-hover:scale-110"
+                            onError={(e) => {
+                              (e.target as HTMLImageElement).src =
+                                "https://placehold.co/300x300?text=" + shape.label;
+                            }}
+                          />
+                        </div>
 
-        {/* 3. Photo Upload */}
-        <section className="mt-16">
-          <Reveal delay={0.3}>
-            <h2 className="text-gold font-bold uppercase tracking-[0.3em] text-center mb-8 text-[12px]">
-              3. Upload Your Photo
-            </h2>
-            <PhotoUpload
-              shapePreviewImage={selectedShape.previewImage}
-              onPhotoChange={setUploadedPhoto}
-            />
-          </Reveal>
-        </section>
+                        {/* Badge */}
+                        {meta?.badge && (
+                          <span className="absolute top-3 left-3 text-[9px] tracking-[0.2em] uppercase bg-gradient-gold text-white px-2.5 py-1 rounded-sm font-bold shadow-gold">
+                            {meta.badge}
+                          </span>
+                        )}
 
-        {/* 4. Add-ons */}
-        <section className="mt-16">
-          <Reveal delay={0.4}>
-            <h2 className="text-gold font-bold uppercase tracking-[0.3em] text-center mb-8 text-[12px]">
-              4. Premium Add-ons
-            </h2>
-            <AddonList
-              addons={addons}
-              selectedAddons={selectedAddons}
-              onAddonChange={(id, checked, qty) =>
-                setSelectedAddons((prev) => ({ ...prev, [id]: { checked, qty } }))
-              }
-            />
-          </Reveal>
-        </section>
+                        {/* Hover overlay */}
+                        <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500 flex items-end p-5">
+                          <span className="w-full py-3 text-center text-[10px] tracking-[0.2em] uppercase font-bold text-white bg-gradient-gold rounded-sm shadow-gold flex items-center justify-center gap-2">
+                            Customize Now <ArrowRight className="w-3.5 h-3.5" />
+                          </span>
+                        </div>
+                      </div>
 
-        {/* 5. Custom Inscription */}
-        <section className="mt-16">
-          <Reveal delay={0.5}>
-            <h2 className="text-gold font-bold uppercase tracking-[0.3em] text-center mb-8 text-[12px]">
-              5. Custom Inscription
-            </h2>
-            <div className="relative">
-              <input
-                type="text"
-                placeholder="Type your engraving text here..."
-                value={inscriptionText}
-                onChange={(e) => setInscriptionText(e.target.value)}
-                className="w-full bg-card/30 border border-border rounded-sm px-5 py-4 text-sm focus:border-gold outline-none transition-colors italic"
-              />
+                      {/* Product Info */}
+                      <div className="pt-4 pb-2">
+                        <h3 className="font-display text-lg md:text-xl text-foreground leading-snug group-hover:text-gold transition-colors mb-1">
+                          {shape.label}
+                        </h3>
+                        {meta?.description && (
+                          <p className="text-[11px] text-muted-foreground leading-relaxed mb-2 line-clamp-2">
+                            {meta.description}
+                          </p>
+                        )}
+                        <div className="flex items-center justify-between">
+                          <span className="text-[10px] tracking-[0.2em] uppercase text-gold font-bold">
+                            From ${startingPrice}
+                          </span>
+                          <span className="text-[10px] tracking-[0.15em] uppercase text-muted-foreground">
+                            {shape.sizes.length} size{shape.sizes.length > 1 ? "s" : ""}
+                          </span>
+                        </div>
+                      </div>
+                    </Link>
+                  </motion.div>
+                );
+              })}
+            </motion.div>
+          </AnimatePresence>
+
+          {filtered.length === 0 && (
+            <div className="text-center py-32 text-muted-foreground">
+              <p className="text-lg">No products in this category.</p>
             </div>
-          </Reveal>
-        </section>
+          )}
+        </div>
+      </section>
 
-        {/* 6. Checkout Info */}
-        <CustomerForm onShippingChange={setShippingPrice} onFormChange={setFormData} />
-
-        {/* 7. Total & Action */}
-        <TotalBar
-          subtotal={totals.subtotal}
-          shippingPrice={totals.shipping}
-          total={0} // Hardcoded to 0.00 as requested
-          isReady={isReady}
-          missingFields={missingFields}
-          onAddToCart={handleAddToCart}
-        />
-
-        {/* 8. Inspiration Gallery */}
-        <section className="mt-40 mb-20">
+      {/* ───────── BOTTOM CTA ───────── */}
+      <section className="py-24 bg-gradient-crystal border-t border-border">
+        <div className="max-w-3xl mx-auto px-6 text-center">
           <Reveal>
-            <div className="text-center mb-16">
-              <div className="h-[1px] w-24 bg-gold/30 mx-auto mb-8" />
-              <span className="text-[11px] tracking-[0.4em] uppercase text-gold font-bold">
-                Lookbook
-              </span>
-              <h2 className="font-display text-4xl md:text-5xl mt-4 text-gradient-gold pb-2">
-                Handcrafted Masterpieces
-              </h2>
-              <p className="text-muted-foreground text-[10px] mt-6 uppercase tracking-[0.3em] max-w-md mx-auto leading-loose">
-                Every crystal is a bespoke work of art, meticulously laser-engraved for eternity.
-              </p>
+            <span className="text-[11px] tracking-[0.35em] uppercase text-gold font-medium">
+              Need Help Choosing?
+            </span>
+            <h2 className="font-display text-4xl md:text-5xl mt-4 text-foreground">
+              Talk to a crystal specialist.
+            </h2>
+            <p className="mt-4 text-muted-foreground max-w-lg mx-auto">
+              Not sure which product is right for you? Our team is happy to help you pick the
+              perfect crystal for any occasion.
+            </p>
+            <div className="mt-8 flex flex-col sm:flex-row justify-center gap-4">
+              <Link
+                to="/contact"
+                className="bg-gradient-gold text-white px-8 py-4 text-[11px] tracking-[0.3em] uppercase rounded-sm shadow-gold font-bold inline-flex items-center gap-2 justify-center"
+              >
+                Contact Us <ArrowRight className="w-4 h-4" />
+              </Link>
+              <Link
+                to="/about"
+                className="border border-gold/40 text-foreground px-8 py-4 text-[11px] tracking-[0.3em] uppercase rounded-sm hover:border-gold hover:bg-gold/5 transition font-medium"
+              >
+                Learn About Us
+              </Link>
             </div>
           </Reveal>
-
-          <div className="grid grid-cols-2 gap-6 md:gap-8">
-            {[
-              { img: shapes[0].previewImage, t: "Classic Portrait", shapeId: "rectangle-tall" },
-              { img: shapes[2].previewImage, t: "Heart Keepsake", shapeId: "heart" },
-              { img: shapes[5].previewImage, t: "Diamond Cut", shapeId: "cut-corner-diamond" },
-              { img: addons[7].image, t: "Premium Wood Finish", shapeId: "any" },
-              { img: shapes[3].previewImage, t: "Prestige Style", shapeId: "prestige" },
-              { img: addons[2].image, t: "Heart Keychain", shapeId: "heart-keychain" },
-              { img: shapes[10].previewImage, t: "Holiday Ornament", shapeId: "ornament" },
-              { img: shapes[6].previewImage, t: "LED Keychain", shapeId: "vertical-keychain" },
-            ]
-              .filter((item) => item.shapeId === "any" || item.shapeId === selectedShape.id)
-              .map((item, i) => (
-                <Reveal key={i} delay={i * 0.05}>
-                  <div className="relative group overflow-hidden rounded-sm border border-border/40 aspect-square bg-card/10 backdrop-blur-sm flex items-center justify-center p-6 hover:border-gold/30 transition-colors">
-                    <img
-                      src={item.img}
-                      alt={item.t}
-                      className="max-w-full max-h-full object-contain transition-transform duration-1000 group-hover:scale-110"
-                    />
-                    <div className="absolute inset-0 bg-gradient-to-t from-background/95 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity flex items-end p-6">
-                      <span className="text-[9px] tracking-[0.25em] uppercase font-bold text-gold">
-                        {item.t}
-                      </span>
-                    </div>
-                  </div>
-                </Reveal>
-              ))}
-          </div>
-        </section>
-
-        {/* Footer Contact Strip */}
-        <Reveal delay={0.6}>
-          <div className="text-center mt-12 border border-border/60 rounded-sm p-8 bg-card/20">
-            <p className="text-[10px] font-bold uppercase tracking-[0.3em] mb-6 text-muted-foreground">
-              Contact Us for Queries / Support
-            </p>
-            <div className="flex flex-col sm:flex-row items-center justify-center gap-6 text-[11px] tracking-[0.1em] font-medium text-foreground">
-              <a
-                href="mailto:support@memory3d.com"
-                className="flex items-center gap-2 hover:text-gold transition-colors"
-              >
-                <Mail className="w-4 h-4 text-gold" /> support@memory3d.com
-              </a>
-              <span className="hidden sm:block opacity-30">|</span>
-              <a
-                href="tel:888-936-3667"
-                className="flex items-center gap-2 hover:text-gold transition-colors"
-              >
-                <Phone className="w-4 h-4 text-gold" /> 888-936-3667
-              </a>
-            </div>
-          </div>
-        </Reveal>
-      </main>
+        </div>
+      </section>
     </div>
   );
 }
