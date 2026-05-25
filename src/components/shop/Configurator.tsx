@@ -130,7 +130,7 @@ export function Configurator({ shape }: ConfiguratorProps) {
   const description = productDescriptions[shape.id] || "";
 
   return (
-    <div className="pt-16 border-t border-border mt-16 scroll-mt-24" id="configurator-section">
+    <div className="pt-10 pb-16">
       <div className="grid lg:grid-cols-2 gap-16 lg:gap-24 items-start">
         {/* Left: Sticky Product Image + Trust Badges */}
         <Reveal>

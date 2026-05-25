@@ -1,20 +1,19 @@
 import { Link } from "@tanstack/react-router";
 import { useState, useEffect } from "react";
-import { ShoppingCart, ArrowRight, Phone, X } from "lucide-react";
+import { ArrowRight, Phone, X } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import logo from "@/assets/Memory_3D_Logo (1) (3).png";
-import { useCart } from "@/hooks/use-cart";
 
 const nav = [
-  { to: "/about", label: "About Us" },
   { to: "/shop", label: "Shop" },
+  { to: "/about", label: "About Us" },
   { to: "/contact", label: "Contact Us" },
 ] as const;
 
 const mobileNav = [
   { to: "/" as const, label: "Home" },
-  { to: "/about" as const, label: "About Us" },
   { to: "/shop" as const, label: "Shop" },
+  { to: "/about" as const, label: "About Us" },
   { to: "/contact" as const, label: "Contact Us" },
 ];
 
@@ -22,8 +21,6 @@ export function Header() {
   const [open, setOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
   const [bannerVisible, setBannerVisible] = useState(true);
-  const { totalItems } = useCart();
-
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 8);
     onScroll();
@@ -114,28 +111,6 @@ export function Header() {
 
           {/* ── Right actions ── */}
           <div className="flex items-center gap-1.5 md:gap-3">
-
-            {/* Cart icon */}
-            <Link
-              to="/cart"
-              className="relative flex items-center justify-center w-9 h-9 rounded-full text-foreground/50 hover:text-gold hover:bg-gold/10 transition-all duration-200"
-              aria-label={`View cart${totalItems > 0 ? ` (${totalItems} items)` : ""}`}
-            >
-              <ShoppingCart className="w-[17px] h-[17px]" />
-              <AnimatePresence>
-                {totalItems > 0 && (
-                  <motion.span
-                    key="badge"
-                    initial={{ scale: 0, opacity: 0 }}
-                    animate={{ scale: 1, opacity: 1 }}
-                    exit={{ scale: 0, opacity: 0 }}
-                    className="absolute -top-0.5 -right-0.5 bg-gold text-white text-[8px] min-w-[16px] h-[16px] rounded-full flex items-center justify-center font-bold px-0.5"
-                  >
-                    {totalItems > 9 ? "9+" : totalItems}
-                  </motion.span>
-                )}
-              </AnimatePresence>
-            </Link>
 
             {/* Order Now -  pill CTA */}
             <Link
