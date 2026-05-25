@@ -1,6 +1,6 @@
 import { Link } from "@tanstack/react-router";
 import { Instagram, Facebook, Mail, Phone, MapPin } from "lucide-react";
-import logo from "@/assets/logo.avif";
+import logo from "@/assets/Memory_3D_Logo (1) (3).png";
 
 export function Footer() {
   return (
@@ -14,10 +14,6 @@ export function Footer() {
                 src={logo}
                 alt="Memory3D Logo"
                 className="h-12 w-auto"
-                style={{
-                  filter:
-                    "invert(42%) sepia(55%) saturate(600%) hue-rotate(5deg) brightness(85%) contrast(90%)",
-                }}
               />
             </div>
             <p className="text-sm text-muted-foreground leading-relaxed max-w-xs">

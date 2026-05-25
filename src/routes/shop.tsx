@@ -1,9 +1,10 @@
-import { createFileRoute, Link, Outlet, useRouterState } from "@tanstack/react-router";
+import { createFileRoute, Link } from "@tanstack/react-router";
 import { useState, useMemo } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { ArrowRight, Sparkles, ChevronRight } from "lucide-react";
-import { shapes } from "@/data/products";
+import { shapes, type Shape } from "@/data/products";
 import { Reveal } from "@/components/site/Reveal";
+import { Configurator } from "@/components/shop/Configurator";
 
 export const Route = createFileRoute("/shop")({
   head: () => ({
@@ -16,7 +17,7 @@ export const Route = createFileRoute("/shop")({
       },
     ],
   }),
-  component: ShopWrapper,
+  component: ShopCatalog,
 });
 
 /* ─── Product metadata ─── */
@@ -36,7 +37,7 @@ const productMeta: Record<
   "notched-wide":     { category: "crystal",  description: "Wide-format notched crystal -  great for landscape photos." },
   "desk-lamp":        { category: "lamp",     description: "Crystal integrated into an elegant illuminated desk lamp." },
   ornament:           { category: "crystal",  description: "Holiday ornament -  a perfect seasonal crystal keepsake.", badge: "Seasonal" },
-  "vertical-keychain":   { category: "keychain", description: "Carry your cherished memory everywhere you go.", badge: "Gift Idea" },
+  "vertical-keychain":   { category: "keychain", description: "Carry your memory everywhere you go.", badge: "Gift Idea" },
   "horizontal-keychain": { category: "keychain", description: "Horizontal crystal keychain -  sleek and modern." },
   "heart-keychain":      { category: "keychain", description: "Heart-shaped crystal on a keychain -  the perfect small gift." },
   "heart-necklace":      { category: "keychain", description: "Wearable crystal heart necklace pendant -  wear your memory." },
@@ -54,16 +55,10 @@ const FILTERS = [
 
 type FilterKey = (typeof FILTERS)[number]["key"];
 
-/* ─── Wrapper ─── */
-function ShopWrapper() {
-  const { location } = useRouterState();
-  const isExact = location.pathname === "/shop" || location.pathname === "/shop/";
-  return isExact ? <ShopCatalog /> : <Outlet />;
-}
-
 /* ─── Catalog page ─── */
 function ShopCatalog() {
   const [activeFilter, setActiveFilter] = useState<FilterKey>("all");
+  const [selectedShape, setSelectedShape] = useState<Shape | null>(null);
 
   const filtered = useMemo(() => {
     if (activeFilter === "all") return shapes;
@@ -75,89 +70,113 @@ function ShopCatalog() {
     return s ? Math.min(...s.sizes.map((z) => z.price)) : 0;
   };
 
+  const handleSelectShape = (shape: Shape) => {
+    setSelectedShape(shape);
+    // Scroll to configurator after a short delay to allow React to render it
+    setTimeout(() => {
+      document.getElementById("configurator-section")?.scrollIntoView({ behavior: "smooth" });
+    }, 100);
+  };
+
   return (
     <div className="bg-background min-h-screen">
 
       {/* ══════════ HERO BANNER ══════════ */}
-      <section className="relative pt-36 pb-20 overflow-hidden">
-        {/* Soft gradient bg */}
-        <div className="absolute inset-0 bg-gradient-hero" />
-        <div className="absolute bottom-0 inset-x-0 h-px bg-gradient-to-r from-transparent via-gold/30 to-transparent" />
+      {!selectedShape && (
+        <section className="relative pt-36 pb-20 overflow-hidden">
+          {/* Soft gradient bg */}
+          <div className="absolute inset-0 bg-gradient-hero" />
+          <div className="absolute bottom-0 inset-x-0 h-px bg-gradient-to-r from-transparent via-gold/30 to-transparent" />
 
-        <div className="relative max-w-7xl mx-auto px-6 lg:px-10">
-          {/* Breadcrumb */}
-          <nav className="flex items-center gap-2 text-[10px] tracking-[0.25em] uppercase text-muted-foreground mb-10">
-            <Link to="/" className="hover:text-gold transition-colors">Home</Link>
-            <ChevronRight className="w-3 h-3 opacity-50" />
-            <span className="text-gold font-semibold">Shop</span>
-          </nav>
+          <div className="relative max-w-7xl mx-auto px-6 lg:px-10">
+            {/* Breadcrumb */}
+            <nav className="flex items-center gap-2 text-[10px] tracking-[0.25em] uppercase text-muted-foreground mb-10">
+              <Link to="/" className="hover:text-gold transition-colors">Home</Link>
+              <ChevronRight className="w-3 h-3 opacity-50" />
+              <span className="text-gold font-semibold">Shop</span>
+            </nav>
 
-          <div className="flex flex-col lg:flex-row lg:items-end justify-between gap-8">
-            <div className="max-w-2xl">
-              <span className="label-chip mb-4 block">Our Collection</span>
-              <h1 className="font-display text-[clamp(3.5rem,8vw,6rem)] leading-[0.9] text-foreground">
-                Shop All<br />
-                <em className="text-gradient-gold not-italic font-light">Crystals</em>
-              </h1>
-              <p className="mt-6 text-lg text-muted-foreground font-light leading-relaxed max-w-lg">
-                Choose your shape, upload your photo, select your size -  we'll craft a
-                stunning 3D laser-engraved keepsake delivered to your door.
-              </p>
-            </div>
+            <div className="flex flex-col lg:flex-row lg:items-end justify-between gap-8">
+              <div className="max-w-2xl">
+                <span className="label-chip mb-4 block">Our Collection</span>
+                <h1 className="font-display text-[clamp(3.5rem,8vw,6rem)] leading-[0.9] text-foreground">
+                  Shop All<br />
+                  <em className="text-gradient-gold not-italic font-light">Crystals</em>
+                </h1>
+                <p className="mt-6 text-lg text-muted-foreground font-light leading-relaxed max-w-lg">
+                  Choose your shape, upload your photo, select your size -  we'll craft a
+                  stunning 3D laser-engraved keepsake delivered to your door.
+                </p>
+              </div>
 
-            {/* Stats block */}
-            <div className="flex gap-10 lg:gap-12 shrink-0 pb-2">
-              {[
-                { n: shapes.length + "+", l: "Products" },
-                { n: "50k+", l: "Happy Customers" },
-                { n: "4.9★", l: "Avg Rating" },
-              ].map((s) => (
-                <div key={s.l} className="text-center">
-                  <div className="font-display text-3xl md:text-4xl text-gradient-gold">{s.n}</div>
-                  <p className="text-[10px] tracking-[0.2em] uppercase text-muted-foreground mt-1">{s.l}</p>
-                </div>
-              ))}
+              {/* Stats block */}
+              <div className="flex gap-10 lg:gap-12 shrink-0 pb-2">
+                {[
+                  { n: shapes.length + "+", l: "Products" },
+                  { n: "50k+", l: "Happy Customers" },
+                  { n: "4.9★", l: "Avg Rating" },
+                ].map((s) => (
+                  <div key={s.l} className="text-center">
+                    <div className="font-display text-3xl md:text-4xl text-gradient-gold">{s.n}</div>
+                    <p className="text-[10px] tracking-[0.2em] uppercase text-muted-foreground mt-1">{s.l}</p>
+                  </div>
+                ))}
+              </div>
             </div>
           </div>
-        </div>
-      </section>
+        </section>
+      )}
 
       {/* ══════════ STICKY FILTER BAR ══════════ */}
-      <div className="sticky top-[68px] z-30 bg-white/96 backdrop-blur-xl border-b border-border/60 shadow-[0_1px_0_0_oklch(0.87_0.006_80/0.5),0_4px_16px_-4px_oklch(0_0_0/0.04)]">
-        <div className="max-w-7xl mx-auto px-5 lg:px-10">
-          <div className="flex items-center gap-2 overflow-x-auto no-scrollbar py-3.5">
-            {FILTERS.map((f) => {
-              const count = f.key === "all"
-                ? shapes.length
-                : shapes.filter((s) => productMeta[s.id]?.category === f.key).length;
-              const isActive = activeFilter === f.key;
+      {!selectedShape && (
+        <div className="sticky top-[68px] z-30 bg-white/96 backdrop-blur-xl border-b border-border/60 shadow-[0_1px_0_0_oklch(0.87_0.006_80/0.5),0_4px_16px_-4px_oklch(0_0_0/0.04)]">
+          <div className="max-w-7xl mx-auto px-5 lg:px-10">
+            <div className="flex items-center gap-2 overflow-x-auto no-scrollbar py-3.5">
+              {FILTERS.map((f) => {
+                const count = f.key === "all"
+                  ? shapes.length
+                  : shapes.filter((s) => productMeta[s.id]?.category === f.key).length;
+                const isActive = activeFilter === f.key;
 
-              return (
-                <motion.button
-                  key={f.key}
-                  onClick={() => setActiveFilter(f.key)}
-                  layout
-                  className={`btn-shine shrink-0 flex items-center gap-2 px-4 py-2 rounded-full text-[10px] tracking-[0.18em] uppercase font-bold transition-all duration-250 ${
-                    isActive
-                      ? "bg-gradient-gold text-white shadow-gold"
-                      : "bg-muted text-muted-foreground hover:bg-card hover:text-foreground border border-border hover:border-gold/30"
-                  }`}
-                >
-                  <span className="text-[11px]">{f.icon}</span>
-                  {f.label}
-                  <span className={`text-[9px] font-normal ${isActive ? "text-white/70" : "text-muted-foreground"}`}>
-                    ({count})
-                  </span>
-                </motion.button>
-              );
-            })}
+                return (
+                  <motion.button
+                    key={f.key}
+                    onClick={() => setActiveFilter(f.key)}
+                    layout
+                    className={`btn-shine shrink-0 flex items-center gap-2 px-4 py-2 rounded-full text-[10px] tracking-[0.18em] uppercase font-bold transition-all duration-250 ${
+                      isActive
+                        ? "bg-gradient-gold text-white shadow-gold"
+                        : "bg-muted text-muted-foreground hover:bg-card hover:text-foreground border border-border hover:border-gold/30"
+                    }`}
+                  >
+                    <span className="text-[11px]">{f.icon}</span>
+                    {f.label}
+                    <span className={`text-[9px] font-normal ${isActive ? "text-white/70" : "text-muted-foreground"}`}>
+                      ({count})
+                    </span>
+                  </motion.button>
+                );
+              })}
+            </div>
           </div>
         </div>
-      </div>
+      )}
 
-      {/* ══════════ PRODUCT GRID ══════════ */}
-      <section className="py-14 pb-32">
+      {/* ══════════ PRODUCT SELECTION ══════════ */}
+      <section className={`${selectedShape ? "pt-24 pb-14" : "py-14 pb-32"}`}>
         <div className="max-w-7xl mx-auto px-5 lg:px-10">
+          
+          {selectedShape && (
+            <div className="text-center mb-12">
+              <h2 className="font-display text-4xl md:text-5xl text-foreground mb-2">
+                STUNNING 3D GIFT
+              </h2>
+              <p className="text-muted-foreground tracking-[0.1em] uppercase text-[11px] font-semibold">
+                MADE FROM YOUR PHOTO
+              </p>
+            </div>
+          )}
+
           <AnimatePresence mode="wait">
             <motion.div
               key={activeFilter}
@@ -165,12 +184,17 @@ function ShopCatalog() {
               animate={{ opacity: 1, y: 0 }}
               exit={{ opacity: 0, y: -10 }}
               transition={{ duration: 0.28, ease: [0.22, 1, 0.36, 1] }}
-              className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 md:gap-6"
+              className={`${
+                selectedShape 
+                  ? "flex overflow-x-auto gap-6 pb-6 no-scrollbar snap-x snap-mandatory scroll-px-10 justify-center" 
+                  : "grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 md:gap-6"
+              }`}
             >
               {filtered.map((shape, i) => {
                 const meta    = productMeta[shape.id];
                 const price   = getStartingPrice(shape.id);
                 const sizes   = shape.sizes.length;
+                const isSelected = selectedShape?.id === shape.id;
 
                 return (
                   <motion.article
@@ -178,18 +202,25 @@ function ShopCatalog() {
                     initial={{ opacity: 0, y: 24 }}
                     animate={{ opacity: 1, y: 0 }}
                     transition={{ delay: Math.min(i * 0.035, 0.35), duration: 0.45, ease: [0.22, 1, 0.36, 1] }}
-                    className="group"
+                    className={`${selectedShape ? "min-w-[160px] md:min-w-[200px] snap-start" : "group"}`}
                   >
-                    <Link to={`/shop/${shape.id}`} className="block">
+                    <div 
+                      onClick={() => handleSelectShape(shape)}
+                      className={`block cursor-pointer transition-all duration-300 rounded-2xl ${
+                        isSelected 
+                          ? "ring-2 ring-gold p-1" 
+                          : selectedShape ? "opacity-60 grayscale-[0.2] hover:opacity-100 hover:grayscale-0" : ""
+                      }`}
+                    >
 
                       {/* ── Image card ── */}
-                      <div className="card-lift relative aspect-square rounded-xl overflow-hidden bg-card border border-border/80 shadow-card mb-4">
+                      <div className={`card-lift relative aspect-square rounded-xl overflow-hidden bg-card border border-border/80 shadow-card ${selectedShape ? "mb-2" : "mb-4"}`}>
 
                         {/* Subtle radial glow bg */}
                         <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_60%_30%,oklch(0.62_0.14_79/0.06),transparent_65%)]" />
 
                         {/* Product image -  scales on hover */}
-                        <div className="absolute inset-0 flex items-center justify-center p-7">
+                        <div className={`absolute inset-0 flex items-center justify-center ${selectedShape ? "p-4" : "p-7"}`}>
                           <motion.img
                             src={shape.thumbImage}
                             alt={shape.label}
@@ -203,67 +234,82 @@ function ShopCatalog() {
                           />
                         </div>
 
-                        {/* Badge */}
-                        {meta?.badge && (
+                        {/* Badge -  hide if selectedShape view to save space */}
+                        {!selectedShape && meta?.badge && (
                           <div className="absolute top-3 left-3">
                             <span className="badge-gold">{meta.badge}</span>
                           </div>
                         )}
 
-                        {/* Sizes chip */}
-                        <div className="absolute top-3 right-3 bg-white/90 backdrop-blur-sm px-2.5 py-1 rounded-full text-[9px] tracking-[0.15em] uppercase text-muted-foreground font-semibold shadow-sm border border-border/50">
-                          {sizes} size{sizes > 1 ? "s" : ""}
-                        </div>
+                        {/* Sizes chip -  hide if selectedShape view */}
+                        {!selectedShape && (
+                          <div className="absolute top-3 right-3 bg-white/90 backdrop-blur-sm px-2.5 py-1 rounded-full text-[9px] tracking-[0.15em] uppercase text-muted-foreground font-semibold shadow-sm border border-border/50">
+                            {sizes} size{sizes > 1 ? "s" : ""}
+                          </div>
+                        )}
 
                         {/* Hover CTA sweep */}
-                        <div className="absolute inset-0 flex flex-col justify-end p-4 opacity-0 group-hover:opacity-100 transition-all duration-400 bg-gradient-to-t from-black/75 via-black/15 to-transparent">
-                          <motion.div
-                            initial={{ y: 10 }}
-                            whileInView={{ y: 0 }}
-                            className="btn-shine flex items-center justify-center gap-2 w-full py-3 bg-gradient-gold text-white rounded-full text-[10px] tracking-[0.22em] uppercase font-bold shadow-gold"
-                          >
-                            Customize Now
-                            <ArrowRight className="w-3.5 h-3.5 group-hover:translate-x-0.5 transition-transform" />
-                          </motion.div>
-                        </div>
+                        {!selectedShape && (
+                          <div className="absolute inset-0 flex flex-col justify-end p-4 opacity-0 group-hover:opacity-100 transition-all duration-400 bg-gradient-to-t from-black/75 via-black/15 to-transparent">
+                            <motion.div
+                              initial={{ y: 10 }}
+                              whileInView={{ y: 0 }}
+                              className="btn-shine flex items-center justify-center gap-2 w-full py-3 bg-gradient-gold text-white rounded-full text-[10px] tracking-[0.22em] uppercase font-bold shadow-gold"
+                            >
+                              Customize Now
+                              <ArrowRight className="w-3.5 h-3.5 group-hover:translate-x-0.5 transition-transform" />
+                            </motion.div>
+                          </div>
+                        )}
                       </div>
 
                       {/* ── Product info ── */}
-                      <div className="px-0.5 mt-2">
-                        <h3 className="font-display text-[1.15rem] md:text-[1.25rem] text-foreground leading-snug group-hover:text-gold transition-colors duration-200 mb-1">
+                      <div className="px-0.5 mt-1 text-center">
+                        <h3 className={`${selectedShape ? "text-[12px]" : "text-[1.15rem] md:text-[1.25rem]"} font-display text-foreground leading-snug group-hover:text-gold transition-colors duration-200 mb-1`}>
                           {shape.label}
                         </h3>
-                        {meta?.description && (
+                        {!selectedShape && meta?.description && (
                           <p className="text-[11px] text-muted-foreground leading-relaxed line-clamp-1 mb-2.5">
                             {meta.description}
                           </p>
                         )}
-                        <div className="flex items-center justify-between mb-4">
-                          <span className="text-[11px] tracking-[0.15em] uppercase font-bold text-gold">
-                            From ${price}
-                          </span>
-                          <span className="text-[10px] text-muted-foreground flex items-center gap-1">
-                            {sizes} sizes
-                          </span>
-                        </div>
-                        
-                        <div className="md:hidden lg:block">
-                          <div className="btn-shine flex items-center justify-center gap-2 w-full py-2.5 bg-gradient-gold text-white rounded-lg text-[9px] tracking-[0.2em] uppercase font-bold shadow-gold opacity-90 group-hover:opacity-100 transition-opacity">
-                            Add to Cart
+                        {!selectedShape && (
+                          <div className="flex items-center justify-between mb-4">
+                            <span className="text-[11px] tracking-[0.15em] uppercase font-bold text-gold">
+                              From ${price}
+                            </span>
+                            <span className="text-[10px] text-muted-foreground flex items-center gap-1">
+                              {sizes} sizes
+                            </span>
                           </div>
-                        </div>
+                        )}
                       </div>
-                    </Link>
+                    </div>
                   </motion.article>
                 );
               })}
             </motion.div>
           </AnimatePresence>
 
+          {selectedShape && (
+            <div className="flex items-center justify-center gap-3 text-[9px] tracking-[0.3em] uppercase text-muted-foreground mb-12">
+              <span className="h-px w-8 bg-border" />
+              Swipe for more products
+              <span className="h-px w-8 bg-border" />
+            </div>
+          )}
+
           {filtered.length === 0 && (
             <div className="text-center py-40">
               <Sparkles className="w-10 h-10 text-gold/30 mx-auto mb-4" />
               <p className="text-muted-foreground">No products in this category yet.</p>
+            </div>
+          )}
+
+          {/* ══════════ CONFIGURATOR SECTION ══════════ */}
+          {selectedShape && (
+            <div id="configurator-section">
+              <Configurator shape={selectedShape} />
             </div>
           )}
         </div>

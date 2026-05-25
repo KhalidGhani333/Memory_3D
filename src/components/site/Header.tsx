@@ -2,7 +2,7 @@ import { Link } from "@tanstack/react-router";
 import { useState, useEffect } from "react";
 import { ShoppingCart, ArrowRight, Phone, X } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
-import logo from "@/assets/logo.avif";
+import logo from "@/assets/Memory_3D_Logo (1) (3).png";
 import { useCart } from "@/hooks/use-cart";
 
 const nav = [
@@ -95,10 +95,6 @@ export function Header() {
               src={logo}
               alt="Memory3D"
               className="h-8 md:h-9 w-auto"
-              style={{
-                filter:
-                  "invert(42%) sepia(55%) saturate(600%) hue-rotate(5deg) brightness(82%) contrast(92%)",
-              }}
             />
           </Link>
 
