@@ -53,7 +53,7 @@ type FilterKey = (typeof FILTERS)[number]["key"];
 
 /* ─── Catalog page ─── */
 function ShopCatalog() {
-  // ── ALL hooks must be at the top — no hooks after any conditional return ──
+  // ── ALL hooks must be at the top   no hooks after any conditional return ──
   const matches      = useRouterState({ select: (s) => s.matches });
   const productsRef  = useRef<HTMLDivElement>(null);
   const [activeFilter,  setActiveFilter]  = useState<FilterKey>("all");
@@ -112,7 +112,7 @@ function ShopCatalog() {
                 Made from your photo
               </p>
               <p className="mt-5 text-lg text-muted-foreground font-light leading-relaxed max-w-lg">
-                Choose your frame, pick a design, upload your photo — we'll craft a stunning
+                Choose your frame, pick a design, upload your photo   we'll craft a stunning
                 3D laser-engraved keepsake delivered to your door.
               </p>
             </div>
@@ -162,7 +162,7 @@ function ShopCatalog() {
         </div>
       </div>
 
-      {/* ══════════ STEP 1 — FRAME SELECTOR ══════════ */}
+      {/* ══════════ STEP 1   FRAME SELECTOR ══════════ */}
       <section className="pt-10 pb-6">
         <div className="px-5 lg:px-10">
 
@@ -231,7 +231,7 @@ function ShopCatalog() {
         </div>
       </section>
 
-      {/* ══════════ STEP 2 — PRODUCTS GRID ══════════ */}
+      {/* ══════════ STEP 2   PRODUCTS GRID ══════════ */}
       <section ref={productsRef} className="pb-28 pt-4 scroll-mt-24">
         <div className="max-w-7xl mx-auto px-5 lg:px-10">
 
@@ -240,7 +240,7 @@ function ShopCatalog() {
             <span className="w-6 h-6 rounded-full bg-gradient-gold text-white text-[10px] font-bold grid place-items-center shrink-0">2</span>
             <div>
               <p className="text-[11px] tracking-[0.25em] uppercase font-bold text-foreground">
-                {selectedShape ? `${selectedShape.label} — Products` : "All Products"}
+                {selectedShape ? `${selectedShape.label}   Products` : "All Products"}
               </p>
               <p className="text-[10px] text-muted-foreground mt-0.5">
                 {visibleProducts.length} product{visibleProducts.length !== 1 ? "s" : ""}
@@ -257,7 +257,7 @@ function ShopCatalog() {
             )}
           </div>
 
-          {/* Products grid — animate on filter/frame change */}
+          {/* Products grid   animate on filter/frame change */}
           <AnimatePresence mode="wait">
             <motion.div
               key={selectedShape?.id ?? activeFilter}

@@ -427,12 +427,12 @@ function Home() {
                 </h2>
                 <p className="mt-6 text-lg text-muted-foreground leading-relaxed max-w-lg">
                   Place your crystal on one of our premium LED lightbases and watch your memory
-                  come alive. Rotating platforms, colour-changing bases, and warm golden glows —
+                  come alive. Rotating platforms, colour-changing bases, and warm golden glows  
                   every angle reveals something new.
                 </p>
                 <ul className="mt-8 space-y-4">
                   {[
-                    "360° rotating lightbase — never the same angle twice",
+                    "360° rotating lightbase   never the same angle twice",
                     "Warm LED glow enhances every engraved detail",
                     "Available in silver, wooden & colour-changing finishes",
                     "Pairs with any crystal shape in our collection",
