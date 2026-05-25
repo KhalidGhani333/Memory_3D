@@ -1,10 +1,9 @@
-import { createFileRoute, Link } from "@tanstack/react-router";
-import { useState, useMemo } from "react";
+import { createFileRoute, Link, Outlet, useRouterState } from "@tanstack/react-router";
+import { useState, useMemo, useRef } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { ArrowRight, Sparkles, ChevronRight } from "lucide-react";
+import { ArrowRight, ChevronRight, X } from "lucide-react";
 import { shapes, type Shape } from "@/data/products";
 import { Reveal } from "@/components/site/Reveal";
-import { Configurator } from "@/components/shop/Configurator";
 
 export const Route = createFileRoute("/shop")({
   head: () => ({
@@ -20,298 +19,310 @@ export const Route = createFileRoute("/shop")({
   component: ShopCatalog,
 });
 
-/* ─── Product metadata ─── */
-const productMeta: Record<
-  string,
-  { category: "crystal" | "keychain" | "pet" | "lamp"; description: string; badge?: string }
-> = {
-  "rectangle-tall":   { category: "crystal",  description: "Classic portrait format -  perfect for individuals or couples.", badge: "Most Popular" },
-  "rectangle-wide":   { category: "crystal",  description: "Landscape format -  ideal for groups and family panoramas." },
-  heart:              { category: "crystal",  description: "Romantic heart shape -  our top-selling wedding keepsake.", badge: "Bestseller" },
-  prestige:           { category: "crystal",  description: "Elegant beveled crystal with a premium angled finish.", badge: "Premium" },
-  ball:               { category: "crystal",  description: "Spherical optical crystal that stuns from every angle." },
-  "cut-corner-diamond": { category: "crystal", description: "Diamond cut with signature angled corners -  great value.", badge: "Great Value" },
-  candle:             { category: "crystal",  description: "Cylindrical crystal that glows beautifully with any lightbase." },
-  urn:                { category: "crystal",  description: "Memorial urn with 3D engraved portrait -  forever cherished." },
-  "notched-tall":     { category: "crystal",  description: "Tall crystal with a distinctive notched top -  modern look." },
-  "notched-wide":     { category: "crystal",  description: "Wide-format notched crystal -  great for landscape photos." },
-  "desk-lamp":        { category: "lamp",     description: "Crystal integrated into an elegant illuminated desk lamp." },
-  ornament:           { category: "crystal",  description: "Holiday ornament -  a perfect seasonal crystal keepsake.", badge: "Seasonal" },
-  "vertical-keychain":   { category: "keychain", description: "Carry your memory everywhere you go.", badge: "Gift Idea" },
-  "horizontal-keychain": { category: "keychain", description: "Horizontal crystal keychain -  sleek and modern." },
-  "heart-keychain":      { category: "keychain", description: "Heart-shaped crystal on a keychain -  the perfect small gift." },
-  "heart-necklace":      { category: "keychain", description: "Wearable crystal heart necklace pendant -  wear your memory." },
-  "dog-bone-vertical":   { category: "pet",     description: "Vertical dog bone crystal -  honour your beloved pet." },
-  "dog-bone-horizontal": { category: "pet",     description: "Horizontal dog bone crystal -  a touching pet memorial." },
+/* ─── Category filters ─── */
+const productMeta: Record<string, { category: "crystal" | "keychain" | "pet" | "lamp" }> = {
+  "rectangle-tall":      { category: "crystal"  },
+  "rectangle-wide":      { category: "crystal"  },
+  heart:                 { category: "crystal"  },
+  prestige:              { category: "crystal"  },
+  ball:                  { category: "crystal"  },
+  "cut-corner-diamond":  { category: "crystal"  },
+  candle:                { category: "crystal"  },
+  urn:                   { category: "crystal"  },
+  "notched-tall":        { category: "crystal"  },
+  "notched-wide":        { category: "crystal"  },
+  "desk-lamp":           { category: "lamp"     },
+  ornament:              { category: "crystal"  },
+  "vertical-keychain":   { category: "keychain" },
+  "horizontal-keychain": { category: "keychain" },
+  "heart-keychain":      { category: "keychain" },
+  "heart-necklace":      { category: "keychain" },
+  "dog-bone-vertical":   { category: "pet"      },
+  "dog-bone-horizontal": { category: "pet"      },
 };
 
 const FILTERS = [
-  { key: "all",     label: "All",               icon: "✦" },
-  { key: "crystal", label: "Crystals",           icon: "💎" },
-  { key: "keychain",label: "Keychains & Jewelry",icon: "🔑" },
-  { key: "pet",     label: "Pet Memorials",      icon: "🐾" },
-  { key: "lamp",    label: "Desk Lamps",         icon: "💡" },
+  { key: "all",      label: "All",                icon: "✦" },
+  { key: "crystal",  label: "Crystals",            icon: "💎" },
+  { key: "keychain", label: "Keychains & Jewelry", icon: "🔑" },
+  { key: "pet",      label: "Pet Memorials",       icon: "🐾" },
+  { key: "lamp",     label: "Desk Lamps",          icon: "💡" },
 ] as const;
 
 type FilterKey = (typeof FILTERS)[number]["key"];
 
 /* ─── Catalog page ─── */
 function ShopCatalog() {
-  const [activeFilter, setActiveFilter] = useState<FilterKey>("all");
+  // ── ALL hooks must be at the top — no hooks after any conditional return ──
+  const matches      = useRouterState({ select: (s) => s.matches });
+  const productsRef  = useRef<HTMLDivElement>(null);
+  const [activeFilter,  setActiveFilter]  = useState<FilterKey>("all");
   const [selectedShape, setSelectedShape] = useState<Shape | null>(null);
 
-  const filtered = useMemo(() => {
+  const filteredFrames = useMemo(() => {
     if (activeFilter === "all") return shapes;
     return shapes.filter((s) => productMeta[s.id]?.category === activeFilter);
   }, [activeFilter]);
 
-  const getStartingPrice = (id: string) => {
-    const s = shapes.find((s) => s.id === id);
-    return s ? Math.min(...s.sizes.map((z) => z.price)) : 0;
+  const visibleProducts = useMemo(() => {
+    const sourceFrames = selectedShape ? [selectedShape] : filteredFrames;
+    return sourceFrames.flatMap((s) =>
+      s.products.map((p) => ({ ...p, shapeId: s.id, startingPrice: Math.min(...s.sizes.map((z) => z.price)) }))
+    );
+  }, [selectedShape, filteredFrames]);
+
+  const getStartingPrice = (shape: Shape) => Math.min(...shape.sizes.map((z) => z.price));
+
+  const handleFrameClick = (shape: Shape) => {
+    setSelectedShape((prev) => (prev?.id === shape.id ? null : shape));
+    setTimeout(() => {
+      productsRef.current?.scrollIntoView({ behavior: "smooth", block: "start" });
+    }, 80);
   };
 
-  const handleSelectShape = (shape: Shape) => {
-    setSelectedShape(shape);
-    // Scroll to configurator after a short delay to allow React to render it
-    setTimeout(() => {
-      document.getElementById("configurator-section")?.scrollIntoView({ behavior: "smooth" });
-    }, 100);
+  const handleFilterChange = (key: FilterKey) => {
+    setActiveFilter(key);
+    setSelectedShape(null);
   };
+
+  // ── After all hooks: conditional render for child route ──
+  const isProductPage = matches.some((m) => m.routeId === "/shop/$productId");
+  if (isProductPage) return <Outlet />;
 
   return (
     <div className="bg-background min-h-screen">
 
-      {/* ══════════ HERO BANNER ══════════ */}
-      {!selectedShape && (
-        <section className="relative pt-36 pb-20 overflow-hidden">
-          {/* Soft gradient bg */}
-          <div className="absolute inset-0 bg-gradient-hero" />
-          <div className="absolute bottom-0 inset-x-0 h-px bg-gradient-to-r from-transparent via-gold/30 to-transparent" />
-
-          <div className="relative max-w-7xl mx-auto px-6 lg:px-10">
-            {/* Breadcrumb */}
-            <nav className="flex items-center gap-2 text-[10px] tracking-[0.25em] uppercase text-muted-foreground mb-10">
-              <Link to="/" className="hover:text-gold transition-colors">Home</Link>
-              <ChevronRight className="w-3 h-3 opacity-50" />
-              <span className="text-gold font-semibold">Shop</span>
-            </nav>
-
-            <div className="flex flex-col lg:flex-row lg:items-end justify-between gap-8">
-              <div className="max-w-2xl">
-                <span className="label-chip mb-4 block">Our Collection</span>
-                <h1 className="font-display text-[clamp(3.5rem,8vw,6rem)] leading-[0.9] text-foreground">
-                  Shop All<br />
-                  <em className="text-gradient-gold not-italic font-light">Crystals</em>
-                </h1>
-                <p className="mt-6 text-lg text-muted-foreground font-light leading-relaxed max-w-lg">
-                  Choose your shape, upload your photo, select your size -  we'll craft a
-                  stunning 3D laser-engraved keepsake delivered to your door.
-                </p>
-              </div>
-
-              {/* Stats block */}
-              <div className="flex gap-10 lg:gap-12 shrink-0 pb-2">
-                {[
-                  { n: shapes.length + "+", l: "Products" },
-                  { n: "50k+", l: "Happy Customers" },
-                  { n: "4.9★", l: "Avg Rating" },
-                ].map((s) => (
-                  <div key={s.l} className="text-center">
-                    <div className="font-display text-3xl md:text-4xl text-gradient-gold">{s.n}</div>
-                    <p className="text-[10px] tracking-[0.2em] uppercase text-muted-foreground mt-1">{s.l}</p>
-                  </div>
-                ))}
-              </div>
+      {/* ══════════ HERO ══════════ */}
+      <section className="relative pt-36 pb-20 overflow-hidden">
+        <div className="absolute inset-0 bg-gradient-hero" />
+        <div className="absolute bottom-0 inset-x-0 h-px bg-gradient-to-r from-transparent via-gold/30 to-transparent" />
+        <div className="relative max-w-7xl mx-auto px-6 lg:px-10">
+          <nav className="flex items-center gap-2 text-[10px] tracking-[0.25em] uppercase text-muted-foreground mb-10">
+            <Link to="/" className="hover:text-gold transition-colors">Home</Link>
+            <ChevronRight className="w-3 h-3 opacity-50" />
+            <span className="text-gold font-semibold">Shop</span>
+          </nav>
+          <div className="flex flex-col lg:flex-row lg:items-end justify-between gap-8">
+            <div className="max-w-2xl">
+              <span className="label-chip mb-4 block">Our Collection</span>
+              <h1 className="font-display text-[clamp(3.5rem,8vw,6rem)] leading-[0.9] text-foreground">
+                Stunning 3D Gift
+              </h1>
+              <p className="mt-4 text-[11px] tracking-[0.35em] uppercase font-semibold text-gold">
+                Made from your photo
+              </p>
+              <p className="mt-5 text-lg text-muted-foreground font-light leading-relaxed max-w-lg">
+                Choose your frame, pick a design, upload your photo — we'll craft a stunning
+                3D laser-engraved keepsake delivered to your door.
+              </p>
             </div>
-          </div>
-        </section>
-      )}
-
-      {/* ══════════ STICKY FILTER BAR ══════════ */}
-      {!selectedShape && (
-        <div className="sticky top-[68px] z-30 bg-white/96 backdrop-blur-xl border-b border-border/60 shadow-[0_1px_0_0_oklch(0.87_0.006_80/0.5),0_4px_16px_-4px_oklch(0_0_0/0.04)]">
-          <div className="max-w-7xl mx-auto px-5 lg:px-10">
-            <div className="flex items-center gap-2 overflow-x-auto no-scrollbar py-3.5">
-              {FILTERS.map((f) => {
-                const count = f.key === "all"
-                  ? shapes.length
-                  : shapes.filter((s) => productMeta[s.id]?.category === f.key).length;
-                const isActive = activeFilter === f.key;
-
-                return (
-                  <motion.button
-                    key={f.key}
-                    onClick={() => setActiveFilter(f.key)}
-                    layout
-                    className={`btn-shine shrink-0 flex items-center gap-2 px-4 py-2 rounded-full text-[10px] tracking-[0.18em] uppercase font-bold transition-all duration-250 ${
-                      isActive
-                        ? "bg-gradient-gold text-white shadow-gold"
-                        : "bg-muted text-muted-foreground hover:bg-card hover:text-foreground border border-border hover:border-gold/30"
-                    }`}
-                  >
-                    <span className="text-[11px]">{f.icon}</span>
-                    {f.label}
-                    <span className={`text-[9px] font-normal ${isActive ? "text-white/70" : "text-muted-foreground"}`}>
-                      ({count})
-                    </span>
-                  </motion.button>
-                );
-              })}
+            <div className="flex gap-10 lg:gap-12 shrink-0 pb-2">
+              {[
+                { n: shapes.length + "+", l: "Frames" },
+                { n: "50k+",              l: "Happy Customers" },
+                { n: "4.9★",             l: "Avg Rating" },
+              ].map((s) => (
+                <div key={s.l} className="text-center">
+                  <div className="font-display text-3xl md:text-4xl text-gradient-gold">{s.n}</div>
+                  <p className="text-[10px] tracking-[0.2em] uppercase text-muted-foreground mt-1">{s.l}</p>
+                </div>
+              ))}
             </div>
           </div>
         </div>
-      )}
+      </section>
 
-      {/* ══════════ PRODUCT SELECTION ══════════ */}
-      <section className={`${selectedShape ? "pt-24 pb-14" : "py-14 pb-32"}`}>
+      {/* ══════════ STICKY FILTER BAR ══════════ */}
+      <div className="sticky top-[68px] z-30 bg-white/96 backdrop-blur-xl border-b border-border/60 shadow-[0_4px_16px_-4px_oklch(0_0_0/0.04)]">
         <div className="max-w-7xl mx-auto px-5 lg:px-10">
-          
-          {selectedShape && (
-            <div className="text-center mb-12">
-              <h2 className="font-display text-4xl md:text-5xl text-foreground mb-2">
-                STUNNING 3D GIFT
-              </h2>
-              <p className="text-muted-foreground tracking-[0.1em] uppercase text-[11px] font-semibold">
-                MADE FROM YOUR PHOTO
-              </p>
-            </div>
-          )}
+          <div className="flex items-center gap-2 overflow-x-auto no-scrollbar py-3.5">
+            {FILTERS.map((f) => {
+              const count = f.key === "all" ? shapes.length : shapes.filter((s) => productMeta[s.id]?.category === f.key).length;
+              const isActive = activeFilter === f.key;
+              return (
+                <motion.button
+                  key={f.key}
+                  layout
+                  onClick={() => handleFilterChange(f.key)}
+                  className={`btn-shine shrink-0 flex items-center gap-2 px-4 py-2 rounded-full text-[10px] tracking-[0.18em] uppercase font-bold transition-all duration-250 ${
+                    isActive
+                      ? "bg-gradient-gold text-white shadow-gold"
+                      : "bg-muted text-muted-foreground hover:bg-card hover:text-foreground border border-border hover:border-gold/30"
+                  }`}
+                >
+                  <span className="text-[11px]">{f.icon}</span>
+                  {f.label}
+                  <span className={`text-[9px] font-normal ${isActive ? "text-white/70" : "text-muted-foreground"}`}>
+                    ({count})
+                  </span>
+                </motion.button>
+              );
+            })}
+          </div>
+        </div>
+      </div>
+
+      {/* ══════════ STEP 1 — FRAME SELECTOR ══════════ */}
+      <section className="pt-10 pb-6">
+        <div className="px-5 lg:px-10">
+
+          <div className="flex items-center gap-3 mb-5 max-w-7xl mx-auto">
+            <span className="w-6 h-6 rounded-full bg-gradient-gold text-white text-[10px] font-bold grid place-items-center shrink-0">1</span>
+            <p className="text-[11px] tracking-[0.25em] uppercase font-bold text-foreground">Select a Frame</p>
+            {selectedShape && (
+              <button
+                onClick={() => setSelectedShape(null)}
+                className="ml-auto flex items-center gap-1.5 text-[10px] tracking-[0.15em] uppercase text-muted-foreground hover:text-gold transition-colors"
+              >
+                <X className="w-3 h-3" /> Clear
+              </button>
+            )}
+          </div>
 
           <AnimatePresence mode="wait">
             <motion.div
               key={activeFilter}
-              initial={{ opacity: 0, y: 14 }}
+              initial={{ opacity: 0, y: 10 }}
               animate={{ opacity: 1, y: 0 }}
-              exit={{ opacity: 0, y: -10 }}
-              transition={{ duration: 0.28, ease: [0.22, 1, 0.36, 1] }}
-              className={`${
-                selectedShape 
-                  ? "flex overflow-x-auto gap-6 pb-6 no-scrollbar snap-x snap-mandatory scroll-px-10 justify-center" 
-                  : "grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 md:gap-6"
-              }`}
+              exit={{ opacity: 0, y: -8 }}
+              transition={{ duration: 0.25, ease: [0.22, 1, 0.36, 1] }}
+              className="grid grid-rows-2 grid-flow-col auto-cols-[minmax(130px,1fr)] gap-3 overflow-x-auto no-scrollbar pb-2"
             >
-              {filtered.map((shape, i) => {
-                const meta    = productMeta[shape.id];
-                const price   = getStartingPrice(shape.id);
-                const sizes   = shape.sizes.length;
+              {filteredFrames.map((shape, i) => {
                 const isSelected = selectedShape?.id === shape.id;
-
                 return (
-                  <motion.article
+                  <motion.button
                     key={shape.id}
-                    initial={{ opacity: 0, y: 24 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    transition={{ delay: Math.min(i * 0.035, 0.35), duration: 0.45, ease: [0.22, 1, 0.36, 1] }}
-                    className={`${selectedShape ? "min-w-[160px] md:min-w-[200px] snap-start" : "group"}`}
+                    onClick={() => handleFrameClick(shape)}
+                    initial={{ opacity: 0, scale: 0.95 }}
+                    animate={{ opacity: 1, scale: 1 }}
+                    transition={{ delay: Math.min(i * 0.025, 0.25), duration: 0.3 }}
+                    className={`group relative flex flex-col items-center gap-2 p-3 rounded-2xl border-2 transition-all duration-250 cursor-pointer ${
+                      isSelected
+                        ? "border-gold bg-gold/5 shadow-gold"
+                        : "border-border bg-card hover:border-gold/50 hover:bg-gold/[0.03]"
+                    }`}
                   >
-                    <div 
-                      onClick={() => handleSelectShape(shape)}
-                      className={`block cursor-pointer transition-all duration-300 rounded-2xl ${
-                        isSelected 
-                          ? "ring-2 ring-gold p-1" 
-                          : selectedShape ? "opacity-60 grayscale-[0.2] hover:opacity-100 hover:grayscale-0" : ""
-                      }`}
-                    >
-
-                      {/* ── Image card ── */}
-                      <div className={`card-lift relative aspect-square rounded-xl overflow-hidden bg-card border border-border/80 shadow-card ${selectedShape ? "mb-2" : "mb-4"}`}>
-
-                        {/* Subtle radial glow bg */}
-                        <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_60%_30%,oklch(0.62_0.14_79/0.06),transparent_65%)]" />
-
-                        {/* Product image -  scales on hover */}
-                        <div className={`absolute inset-0 flex items-center justify-center ${selectedShape ? "p-4" : "p-7"}`}>
-                          <motion.img
-                            src={shape.thumbImage}
-                            alt={shape.label}
-                            className="max-w-full max-h-full object-contain drop-shadow-sm"
-                            whileHover={{ scale: 1.08 }}
-                            transition={{ duration: 0.55, ease: [0.22, 1, 0.36, 1] }}
-                            onError={(e) => {
-                              (e.target as HTMLImageElement).src =
-                                `https://placehold.co/280x280?text=${encodeURIComponent(shape.label)}`;
-                            }}
-                          />
-                        </div>
-
-                        {/* Badge -  hide if selectedShape view to save space */}
-                        {!selectedShape && meta?.badge && (
-                          <div className="absolute top-3 left-3">
-                            <span className="badge-gold">{meta.badge}</span>
-                          </div>
-                        )}
-
-                        {/* Sizes chip -  hide if selectedShape view */}
-                        {!selectedShape && (
-                          <div className="absolute top-3 right-3 bg-white/90 backdrop-blur-sm px-2.5 py-1 rounded-full text-[9px] tracking-[0.15em] uppercase text-muted-foreground font-semibold shadow-sm border border-border/50">
-                            {sizes} size{sizes > 1 ? "s" : ""}
-                          </div>
-                        )}
-
-                        {/* Hover CTA sweep */}
-                        {!selectedShape && (
-                          <div className="absolute inset-0 flex flex-col justify-end p-4 opacity-0 group-hover:opacity-100 transition-all duration-400 bg-gradient-to-t from-black/75 via-black/15 to-transparent">
-                            <motion.div
-                              initial={{ y: 10 }}
-                              whileInView={{ y: 0 }}
-                              className="btn-shine flex items-center justify-center gap-2 w-full py-3 bg-gradient-gold text-white rounded-full text-[10px] tracking-[0.22em] uppercase font-bold shadow-gold"
-                            >
-                              Customize Now
-                              <ArrowRight className="w-3.5 h-3.5 group-hover:translate-x-0.5 transition-transform" />
-                            </motion.div>
-                          </div>
-                        )}
-                      </div>
-
-                      {/* ── Product info ── */}
-                      <div className="px-0.5 mt-1 text-center">
-                        <h3 className={`${selectedShape ? "text-[12px]" : "text-[1.15rem] md:text-[1.25rem]"} font-display text-foreground leading-snug group-hover:text-gold transition-colors duration-200 mb-1`}>
-                          {shape.label}
-                        </h3>
-                        {!selectedShape && meta?.description && (
-                          <p className="text-[11px] text-muted-foreground leading-relaxed line-clamp-1 mb-2.5">
-                            {meta.description}
-                          </p>
-                        )}
-                        {!selectedShape && (
-                          <div className="flex items-center justify-between mb-4">
-                            <span className="text-[11px] tracking-[0.15em] uppercase font-bold text-gold">
-                              From ${price}
-                            </span>
-                            <span className="text-[10px] text-muted-foreground flex items-center gap-1">
-                              {sizes} sizes
-                            </span>
-                          </div>
-                        )}
-                      </div>
+                    {/* Frame image */}
+                    <div className="w-16 h-16 flex items-center justify-center">
+                      <img
+                        src={shape.thumbImage}
+                        alt={shape.label}
+                        className={`max-w-full max-h-full object-contain transition-transform duration-300 ${isSelected ? "scale-110" : "group-hover:scale-105"}`}
+                        onError={(e) => {
+                          (e.target as HTMLImageElement).src =
+                            `https://placehold.co/64x64?text=${encodeURIComponent(shape.label[0])}`;
+                        }}
+                      />
                     </div>
-                  </motion.article>
+                    <span className={`text-[9px] tracking-[0.1em] uppercase font-semibold text-center leading-tight transition-colors ${isSelected ? "text-gold" : "text-muted-foreground group-hover:text-foreground"}`}>
+                      {shape.label}
+                    </span>
+                    {isSelected && (
+                      <span className="absolute top-1.5 right-1.5 w-3.5 h-3.5 rounded-full bg-gold flex items-center justify-center">
+                        <span className="text-white text-[7px] font-bold">✓</span>
+                      </span>
+                    )}
+                  </motion.button>
                 );
               })}
             </motion.div>
           </AnimatePresence>
+        </div>
+      </section>
 
-          {selectedShape && (
-            <div className="flex items-center justify-center gap-3 text-[9px] tracking-[0.3em] uppercase text-muted-foreground mb-12">
-              <span className="h-px w-8 bg-border" />
-              Swipe for more products
-              <span className="h-px w-8 bg-border" />
-            </div>
-          )}
+      {/* ══════════ STEP 2 — PRODUCTS GRID ══════════ */}
+      <section ref={productsRef} className="pb-28 pt-4 scroll-mt-24">
+        <div className="max-w-7xl mx-auto px-5 lg:px-10">
 
-          {filtered.length === 0 && (
-            <div className="text-center py-40">
-              <Sparkles className="w-10 h-10 text-gold/30 mx-auto mb-4" />
-              <p className="text-muted-foreground">No products in this category yet.</p>
+          {/* Section header */}
+          <div className="flex items-center gap-3 mb-8">
+            <span className="w-6 h-6 rounded-full bg-gradient-gold text-white text-[10px] font-bold grid place-items-center shrink-0">2</span>
+            <div>
+              <p className="text-[11px] tracking-[0.25em] uppercase font-bold text-foreground">
+                {selectedShape ? `${selectedShape.label} — Products` : "All Products"}
+              </p>
+              <p className="text-[10px] text-muted-foreground mt-0.5">
+                {visibleProducts.length} product{visibleProducts.length !== 1 ? "s" : ""}
+                {selectedShape ? ` · from $${getStartingPrice(selectedShape)}` : ""}
+              </p>
             </div>
-          )}
+            {selectedShape && (
+              <button
+                onClick={() => setSelectedShape(null)}
+                className="ml-auto flex items-center gap-1.5 text-[10px] tracking-[0.15em] uppercase text-muted-foreground hover:text-gold transition-colors"
+              >
+                <X className="w-3 h-3" /> Show All
+              </button>
+            )}
+          </div>
 
-          {/* ══════════ CONFIGURATOR SECTION ══════════ */}
-          {selectedShape && (
-            <div id="configurator-section">
-              <Configurator shape={selectedShape} />
-            </div>
-          )}
+          {/* Products grid — animate on filter/frame change */}
+          <AnimatePresence mode="wait">
+            <motion.div
+              key={selectedShape?.id ?? activeFilter}
+              initial={{ opacity: 0, y: 16 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: -10 }}
+              transition={{ duration: 0.3, ease: [0.22, 1, 0.36, 1] }}
+              className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4 md:gap-6"
+            >
+              {visibleProducts.map((product, i) => (
+                <motion.article
+                  key={product.id}
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ delay: Math.min(i * 0.04, 0.4), duration: 0.4, ease: [0.22, 1, 0.36, 1] }}
+                  className="group"
+                >
+                  <Link
+                    to="/shop/$productId"
+                    params={{ productId: product.shapeId }}
+                    className="block"
+                  >
+                    {/* Product image */}
+                    <div className="card-lift relative aspect-[4/5] rounded-2xl overflow-hidden bg-card border border-border/80 shadow-card mb-3">
+                      <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_60%_20%,oklch(0.62_0.14_79/0.07),transparent_65%)]" />
+
+                      <motion.img
+                        src={product.image}
+                        alt={product.name}
+                        className="absolute inset-0 w-full h-full object-cover"
+                        whileHover={{ scale: 1.05 }}
+                        transition={{ duration: 0.5, ease: [0.22, 1, 0.36, 1] }}
+                        onError={(e) => {
+                          (e.target as HTMLImageElement).src =
+                            `https://placehold.co/400x500?text=${encodeURIComponent(product.name)}`;
+                        }}
+                      />
+
+                      {product.badge && (
+                        <div className="absolute top-3 left-3">
+                          <span className="badge-gold">{product.badge}</span>
+                        </div>
+                      )}
+
+                      {/* Hover overlay */}
+                      <div className="absolute inset-0 flex flex-col justify-end p-4 opacity-0 group-hover:opacity-100 transition-all duration-350 bg-gradient-to-t from-black/80 via-black/20 to-transparent">
+                        <div className="btn-shine flex items-center justify-center gap-2 w-full py-2.5 bg-gradient-gold text-white rounded-full text-[9px] tracking-[0.2em] uppercase font-bold shadow-gold">
+                          Customize
+                          <ArrowRight className="w-3 h-3" />
+                        </div>
+                      </div>
+                    </div>
+
+                    {/* Product info */}
+                    <h3 className="text-[13px] font-display text-foreground group-hover:text-gold transition-colors leading-snug mb-1">
+                      {product.name}
+                    </h3>
+                    <p className="text-[11px] tracking-[0.12em] uppercase font-bold text-gold">
+                      From ${product.startingPrice}
+                    </p>
+                  </Link>
+                </motion.article>
+              ))}
+            </motion.div>
+          </AnimatePresence>
         </div>
       </section>
 

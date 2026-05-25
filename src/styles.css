@@ -265,3 +265,7 @@
     border-radius: 99px;
   }
 }
+
+h1, h2, h3, h4, .font-display {
+  font-weight: 300;
+}

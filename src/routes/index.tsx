@@ -23,6 +23,7 @@ import jamesCover from "@/assets/James_Castle-Cover.avif";
 import sculpturesCover from "@/assets/Memory3D_Sculptures.avif";
 import sculpturesCover1 from "@/assets/Memory3D_Sculptures_1.avif";
 
+import c1 from "@/assets/3D_Crystals_1.avif";
 import c2 from "@/assets/3D_Crystals_2.avif";
 import c3 from "@/assets/3D_Crystals_3.avif";
 import c4 from "@/assets/3D_Crystals_4.avif";
@@ -119,7 +120,24 @@ const featured = [
   },
 ];
 
-const memoryWall = [m0, m1, m2, m3, m4, m5, m6, m7, m8, m9];
+const memoryWall = [
+  { src: m0, tall: true },
+  { src: c1, tall: false },
+  { src: m1, tall: false },
+  { src: m2, tall: false },
+  { src: c2, tall: true },
+  { src: m3, tall: false },
+  { src: m4, tall: false },
+  { src: c3, tall: false },
+  { src: m5, tall: true },
+  { src: m6, tall: false },
+  { src: c4, tall: false },
+  { src: m7, tall: false },
+  { src: c5, tall: true },
+  { src: m8, tall: false },
+  { src: m9, tall: false },
+  { src: c6, tall: false },
+];
 
 const sculptureShots = [
   { src: s4, pos: "object-[center_top]" },
@@ -173,8 +191,8 @@ function Home() {
             playsInline
             className="w-full h-full object-cover"
           />
-          <div className="absolute inset-0 bg-gradient-to-t from-background via-background/65 to-background/20" />
-          <div className="absolute inset-0 bg-gradient-to-r from-background/75 via-transparent to-background/20" />
+          <div className="absolute inset-0 bg-gradient-to-t from-black via-black/60 to-black/15" />
+          <div className="absolute inset-0 bg-gradient-to-r from-black/55 via-transparent to-transparent" />
         </div>
 
         <div className="relative max-w-7xl mx-auto px-6 lg:px-10 w-full grid lg:grid-cols-12 gap-12 items-end">
@@ -190,11 +208,11 @@ function Home() {
                   Premium 3D Crystal Studio
                 </span>
               </div>
-              <h1 className="font-display text-[clamp(3rem,8vw,7rem)] leading-[0.95] text-foreground">
+              <h1 className="font-display text-[clamp(3rem,8vw,7rem)] leading-[0.95] text-white">
                 Hold the moment <br />
                 <em className="text-gradient-gold not-italic font-light">forever</em> in crystal.
               </h1>
-              <p className="mt-8 text-lg md:text-xl text-muted-foreground max-w-xl leading-relaxed font-light">
+              <p className="mt-8 text-lg md:text-xl text-white/70 max-w-xl leading-relaxed font-light">
                 Personalized 3D laser-engraved crystals and full-color sculptures. For weddings,
                 memorials, milestones and everything that mattered enough to keep.
               </p>
@@ -208,7 +226,7 @@ function Home() {
                 </Link>
                 <Link
                   to="/contact"
-                  className="inline-flex items-center justify-center gap-3 border border-gold/50 text-foreground px-9 py-4 text-[11px] tracking-[0.3em] uppercase hover:bg-gold/5 hover:border-gold rounded-full transition-all duration-300 font-medium"
+                  className="inline-flex items-center justify-center gap-3 border border-white/40 text-white px-9 py-4 text-[11px] tracking-[0.3em] uppercase hover:bg-white/10 hover:border-white/70 rounded-full transition-all duration-300 font-medium"
                 >
                   Schedule a Scan
                 </Link>
@@ -225,13 +243,13 @@ function Home() {
             >
               <div className="inline-block hairline pt-6">
                 <div className="text-5xl font-display text-gradient-gold">50,000+</div>
-                <p className="text-[11px] tracking-[0.25em] uppercase text-muted-foreground mt-2">
+                <p className="text-[11px] tracking-[0.25em] uppercase text-white/55 mt-2">
                   Memories carved
                 </p>
               </div>
               <div className="inline-block hairline pt-6 ml-8">
                 <div className="text-5xl font-display text-gradient-gold">4.9★</div>
-                <p className="text-[11px] tracking-[0.25em] uppercase text-muted-foreground mt-2">
+                <p className="text-[11px] tracking-[0.25em] uppercase text-white/55 mt-2">
                   From 12k+ reviews
                 </p>
               </div>
@@ -239,7 +257,7 @@ function Home() {
           </div>
         </div>
 
-        <div className="absolute bottom-6 left-1/2 -translate-x-1/2 text-[10px] tracking-[0.4em] text-muted-foreground uppercase">
+        <div className="absolute bottom-6 left-1/2 -translate-x-1/2 text-[10px] tracking-[0.4em] text-white/50 uppercase">
           Scroll
         </div>
       </section>
@@ -353,6 +371,95 @@ function Home() {
           {/* Gradient Overlays for smooth edges */}
           <div className="absolute inset-y-0 left-0 w-32 bg-gradient-to-r from-background to-transparent z-10 pointer-events-none" />
           <div className="absolute inset-y-0 right-0 w-32 bg-gradient-to-l from-background to-transparent z-10 pointer-events-none" />
+        </div>
+      </section>
+
+      {/* ───────── MEMORY IN MOTION ───────── */}
+      <section className="py-32 bg-background relative overflow-hidden">
+        {/* Subtle radial glow */}
+        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[800px] rounded-full bg-gold/5 blur-[120px] pointer-events-none" />
+
+        <div className="max-w-7xl mx-auto px-6 lg:px-10 relative">
+          <div className="grid lg:grid-cols-2 gap-16 lg:gap-24 items-center">
+
+            {/* Left: Image mosaic */}
+            <Reveal>
+              <div className="grid grid-cols-2 gap-4 [grid-auto-rows:200px]">
+                <div className="row-span-2 relative overflow-hidden rounded-2xl border border-border shadow-card group">
+                  <img
+                    src={pHeart}
+                    alt="Rotating Heart Crystal"
+                    className="w-full h-full object-cover transition-transform duration-[1200ms] group-hover:scale-105"
+                  />
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/50 via-transparent to-transparent" />
+                  <div className="absolute bottom-4 left-4">
+                    <span className="badge-gold">Bestseller</span>
+                  </div>
+                </div>
+                <div className="relative overflow-hidden rounded-2xl border border-border shadow-card group">
+                  <img
+                    src={pSilver}
+                    alt="Silver Lightbase"
+                    className="w-full h-full object-cover transition-transform duration-[1200ms] group-hover:scale-105"
+                  />
+                </div>
+                <div className="relative overflow-hidden rounded-2xl border border-border shadow-card group">
+                  <img
+                    src={pWood}
+                    alt="Wooden Premium Base"
+                    className="w-full h-full object-cover transition-transform duration-[1200ms] group-hover:scale-105"
+                  />
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/40 via-transparent to-transparent" />
+                  <div className="absolute bottom-4 left-4">
+                    <span className="badge-gold">Premium</span>
+                  </div>
+                </div>
+              </div>
+            </Reveal>
+
+            {/* Right: Text */}
+            <Reveal delay={0.2}>
+              <div>
+                <span className="label-chip mb-4 block">Illuminated Collection</span>
+                <h2 className="font-display text-5xl md:text-6xl lg:text-7xl mt-4 leading-[1.0] text-foreground">
+                  Memory <br />
+                  <em className="text-gradient-gold not-italic">in Motion.</em>
+                </h2>
+                <p className="mt-6 text-lg text-muted-foreground leading-relaxed max-w-lg">
+                  Place your crystal on one of our premium LED lightbases and watch your memory
+                  come alive. Rotating platforms, colour-changing bases, and warm golden glows —
+                  every angle reveals something new.
+                </p>
+                <ul className="mt-8 space-y-4">
+                  {[
+                    "360° rotating lightbase — never the same angle twice",
+                    "Warm LED glow enhances every engraved detail",
+                    "Available in silver, wooden & colour-changing finishes",
+                    "Pairs with any crystal shape in our collection",
+                  ].map((item) => (
+                    <li key={item} className="flex items-start gap-3 text-foreground/80">
+                      <span className="mt-1.5 w-1.5 h-1.5 rounded-full bg-gradient-gold shrink-0" />
+                      <span className="text-[15px] leading-snug">{item}</span>
+                    </li>
+                  ))}
+                </ul>
+                <div className="mt-10 flex flex-wrap gap-4">
+                  <Link
+                    to="/shop"
+                    className="btn-shine bg-gradient-gold text-white px-8 py-4 text-[11px] tracking-[0.3em] uppercase rounded-full shadow-gold font-bold hover:-translate-y-px transition-all duration-300 inline-flex items-center gap-2"
+                  >
+                    Shop Lightbases <ArrowRight className="w-4 h-4" />
+                  </Link>
+                  <Link
+                    to="/shop"
+                    className="border border-gold/40 px-8 py-4 text-[11px] tracking-[0.3em] uppercase rounded-full hover:border-gold hover:bg-gold/5 transition-all duration-300 text-foreground font-medium"
+                  >
+                    View All Crystals
+                  </Link>
+                </div>
+              </div>
+            </Reveal>
+          </div>
         </div>
       </section>
 
@@ -478,13 +585,13 @@ function Home() {
               hidden: { opacity: 0 },
               show: {
                 opacity: 1,
-                transition: { staggerChildren: 0.1 },
+                transition: { staggerChildren: 0.07 },
               },
             }}
-            className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-6 md:gap-8"
+            className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 md:gap-5 [grid-auto-rows:220px]"
           >
-            {memoryWall.map((src, i) => (
-              <Link key={i} to="/shop">
+            {memoryWall.map((item, i) => (
+              <Link key={i} to="/shop" className={item.tall ? "row-span-2" : ""}>
                 <motion.div
                   variants={{
                     hidden: { opacity: 0, y: 30 },
@@ -494,13 +601,13 @@ function Home() {
                       transition: { duration: 0.8, ease: [0.22, 1, 0.36, 1] },
                     },
                   }}
-                  whileHover={{ y: -10 }}
-                  className="relative overflow-hidden rounded-2xl group aspect-[4/5] bg-card border border-border shadow-sm"
+                  whileHover={{ y: -6 }}
+                  className="relative overflow-hidden rounded-2xl group h-full bg-card border border-border shadow-sm"
                 >
                   <motion.img
-                    src={src}
+                    src={item.src}
                     alt=""
-                    whileHover={{ scale: 1.08 }}
+                    whileHover={{ scale: 1.06 }}
                     transition={{ duration: 1.2, ease: [0.22, 1, 0.36, 1] }}
                     className="w-full h-full object-cover grayscale-[0.1] group-hover:grayscale-0 transition-[filter] duration-700"
                   />

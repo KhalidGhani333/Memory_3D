@@ -149,7 +149,8 @@ function Contact() {
                     href="mailto:events@memory3d.com"
                     className="text-gold hover:underline font-medium"
                   >
-                    events@memory3d.com
+                    support@memory3d.com
+
                   </a>{" "}
                   for a custom quote.
                 </p>
