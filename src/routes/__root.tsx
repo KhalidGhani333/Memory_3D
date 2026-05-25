@@ -1,14 +1,10 @@
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import {
-  Outlet,
-  Link,
-  createRootRouteWithContext,
-  useRouter,
-} from "@tanstack/react-router";
+import { Outlet, Link, createRootRouteWithContext, useRouter } from "@tanstack/react-router";
 
 import { Header } from "@/components/site/Header";
 import { Footer } from "@/components/site/Footer";
 import { Toaster } from "@/components/ui/sonner";
+import { CartProvider } from "@/hooks/use-cart";
 
 function NotFoundComponent() {
   return (
@@ -16,9 +12,7 @@ function NotFoundComponent() {
       <div className="max-w-md text-center">
         <h1 className="font-display text-7xl text-gradient-gold">404</h1>
         <h2 className="mt-4 text-xl font-display text-foreground">Page not found</h2>
-        <p className="mt-2 text-sm text-muted-foreground">
-          This crystal hasn't been carved yet.
-        </p>
+        <p className="mt-2 text-sm text-muted-foreground">This crystal hasn't been carved yet.</p>
         <div className="mt-6">
           <Link
             to="/"
@@ -46,7 +40,10 @@ function ErrorComponent({ error, reset }: { error: Error; reset: () => void }) {
         </p>
         <div className="mt-6 flex flex-wrap justify-center gap-2">
           <button
-            onClick={() => { router.invalidate(); reset(); }}
+            onClick={() => {
+              router.invalidate();
+              reset();
+            }}
             className="inline-flex items-center justify-center rounded-sm bg-gradient-gold px-5 py-2.5 text-xs tracking-[0.2em] uppercase text-primary-foreground"
           >
             Try again
@@ -73,12 +70,14 @@ function RootComponent() {
   const { queryClient } = Route.useRouteContext();
   return (
     <QueryClientProvider client={queryClient}>
-      <Header />
-      <main className="min-h-screen">
-        <Outlet />
-      </main>
-      <Footer />
-      <Toaster theme="dark" position="bottom-right" />
+      <CartProvider>
+        <Header />
+        <main className="min-h-screen">
+          <Outlet />
+        </main>
+        <Footer />
+        <Toaster theme="dark" position="bottom-right" />
+      </CartProvider>
     </QueryClientProvider>
   );
 }

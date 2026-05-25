@@ -15,9 +15,16 @@ export const Route = createFileRoute("/sculptures")({
   head: () => ({
     meta: [
       { title: "3D Sculptures — Full-Color Figurines of You | Memory3D" },
-      { name: "description", content: "Step into our scanner and walk out with a full-color sculpture of yourself, your family or your pet. Crafted to the last detail." },
+      {
+        name: "description",
+        content:
+          "Step into our scanner and walk out with a full-color sculpture of yourself, your family or your pet. Crafted to the last detail.",
+      },
       { property: "og:title", content: "3D Sculptures — Memory3D" },
-      { property: "og:description", content: "Full-color hand-finished figurines from a 12-second scan." },
+      {
+        property: "og:description",
+        content: "Full-color hand-finished figurines from a 12-second scan.",
+      },
       { property: "og:image", content: cover },
     ],
   }),
@@ -27,20 +34,24 @@ export const Route = createFileRoute("/sculptures")({
 function Sculptures() {
   return (
     <div className="bg-background">
-      <section className="relative min-h-[80vh] flex items-end pt-40 pb-20">
+      <section className="relative min-h-[70vh] flex items-end pt-40 pb-20 overflow-hidden">
         <div className="absolute inset-0">
-          <img src={cover} alt="" className="w-full h-full object-cover" />
-          <div className="absolute inset-0 bg-gradient-to-t from-background via-background/70 to-background/40" />
+          <img 
+            src={cover} 
+            alt="3D Sculpture Banner" 
+            className="w-full h-full object-cover object-[center_10%]" 
+          />
+          <div className="absolute inset-0 bg-gradient-to-t from-background via-background/60 to-transparent" />
         </div>
         <div className="relative max-w-7xl mx-auto px-6 lg:px-10">
           <Reveal>
-            <span className="text-[11px] tracking-[0.35em] uppercase text-gold">3D Sculptures</span>
-            <h1 className="font-display text-6xl md:text-8xl mt-4 max-w-4xl leading-[0.95]">
+            <span className="text-[11px] tracking-[0.35em] uppercase text-gold font-bold">3D Sculptures</span>
+            <h1 className="font-display text-6xl md:text-[7rem] mt-4 max-w-4xl leading-[0.9] text-foreground">
               You, <em className="text-gradient-gold not-italic">in miniature.</em>
             </h1>
-            <p className="mt-6 text-xl text-muted-foreground max-w-xl">
-              Full-color, hand-finished figurines crafted from a single 12-second 3D scan.
-              Stand on your shelf forever.
+            <p className="mt-8 text-xl text-muted-foreground max-w-xl font-light leading-relaxed">
+              Full-color, hand-finished figurines crafted from a single 12-second 3D scan. Stand on
+              your shelf forever.
             </p>
           </Reveal>
         </div>
@@ -50,9 +61,21 @@ function Sculptures() {
         <div className="max-w-7xl mx-auto px-6 lg:px-10">
           <div className="grid md:grid-cols-3 gap-12">
             {[
-              { icon: Camera, t: "12-Second Scan", b: "Our pop-up scanner captures every detail in one quick session." },
-              { icon: Palette, t: "Full Color", b: "Every freckle, every stitch, every shade — printed in stunning color." },
-              { icon: Package, t: "Hand Finished", b: "Each sculpture is inspected and detailed by our artisans before shipping." },
+              {
+                icon: Camera,
+                t: "12-Second Scan",
+                b: "Our pop-up scanner captures every detail in one quick session.",
+              },
+              {
+                icon: Palette,
+                t: "Full Color",
+                b: "Every freckle, every stitch, every shade - printed in stunning color.",
+              },
+              {
+                icon: Package,
+                t: "Hand Finished",
+                b: "Each sculpture is inspected and detailed by our artisans before shipping.",
+              },
             ].map((f, i) => (
               <Reveal key={f.t} delay={i * 0.1}>
                 <div>
@@ -67,23 +90,41 @@ function Sculptures() {
       </section>
 
       <section className="py-20">
-        <div className="max-w-7xl mx-auto px-6 lg:px-10 grid md:grid-cols-2 lg:grid-cols-4 gap-4">
-          {[s1, s2, s3, s4, s5, s6, s7, cover1].map((src, i) => (
+        <div className="max-w-7xl mx-auto px-6 lg:px-10 grid md:grid-cols-2 lg:grid-cols-4 gap-6">
+          {[
+            { src: s1, pos: "object-center" },
+            { src: s2, pos: "object-center" },
+            { src: s3, pos: "object-center" },
+            { src: s4, pos: "object-top" },
+            { src: s5, pos: "object-center" },
+            { src: s6, pos: "object-center" },
+            { src: s7, pos: "object-center" },
+            { src: cover1, pos: "object-top" },
+          ].map((item, i) => (
             <Reveal key={i} delay={(i % 4) * 0.08}>
-              <div className="relative aspect-[3/4] overflow-hidden bg-card rounded-sm group">
-                <img src={src} alt="" className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" />
+              <div className="relative aspect-[3/4] overflow-hidden bg-card rounded-sm group border border-white/5">
+                <img
+                  src={item.src}
+                  alt=""
+                  className={`w-full h-full object-cover ${item.pos} transition-transform duration-700 group-hover:scale-110`}
+                />
+                <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
               </div>
             </Reveal>
           ))}
         </div>
       </section>
 
-      <section className="py-32 text-center">
+      <section className="py-32 text-center bg-gradient-hero">
         <Reveal>
-          <h2 className="font-display text-5xl md:text-6xl max-w-3xl mx-auto px-6">
-            Ready to be <em className="text-gradient-gold not-italic">immortalized?</em>
+          <h2 className="font-display text-5xl md:text-7xl max-w-4xl mx-auto px-6 leading-tight">
+            Ready to be <br />
+            <em className="text-gradient-gold not-italic">immortalized?</em>
           </h2>
-          <Link to="/contact" className="mt-10 inline-flex items-center gap-3 bg-gradient-gold text-primary-foreground px-10 py-4 text-[11px] tracking-[0.3em] uppercase rounded-sm shadow-gold">
+          <Link
+            to="/contact"
+            className="mt-10 inline-flex items-center gap-3 bg-gradient-gold text-black px-10 py-4 text-[11px] tracking-[0.3em] uppercase rounded-sm shadow-gold font-bold"
+          >
             Book Your Scan <ArrowRight className="w-4 h-4" />
           </Link>
         </Reveal>

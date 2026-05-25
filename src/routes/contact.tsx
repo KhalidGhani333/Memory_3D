@@ -8,7 +8,11 @@ export const Route = createFileRoute("/contact")({
   head: () => ({
     meta: [
       { title: "Contact & Schedule a Scan — Memory3D" },
-      { name: "description", content: "Reach our studio, schedule a 3D body scan or get help personalizing your crystal keepsake." },
+      {
+        name: "description",
+        content:
+          "Reach our studio, schedule a 3D body scan or get help personalizing your crystal keepsake.",
+      },
       { property: "og:title", content: "Contact — Memory3D" },
       { property: "og:description", content: "Talk to our crystal specialists." },
     ],
@@ -26,7 +30,8 @@ function Contact() {
           <Reveal>
             <span className="text-[11px] tracking-[0.35em] uppercase text-gold">Get In Touch</span>
             <h1 className="font-display text-6xl md:text-8xl mt-4 leading-[0.95]">
-              Let's make <br /><em className="text-gradient-gold not-italic">something forever.</em>
+              Let's make <br />
+              <em className="text-gradient-gold not-italic">something forever.</em>
             </h1>
           </Reveal>
         </div>
@@ -44,8 +49,12 @@ function Contact() {
               className="space-y-5"
             >
               <div className="grid sm:grid-cols-2 gap-5">
-                <Field label="Name"><input required className="input" placeholder="Your name" /></Field>
-                <Field label="Email"><input required type="email" className="input" placeholder="you@email.com" /></Field>
+                <Field label="Name">
+                  <input required className="input" placeholder="Your name" />
+                </Field>
+                <Field label="Email">
+                  <input required type="email" className="input" placeholder="you@email.com" />
+                </Field>
               </div>
               <Field label="What interests you?">
                 <select className="input">
@@ -58,7 +67,12 @@ function Contact() {
                 </select>
               </Field>
               <Field label="Tell us about your project">
-                <textarea required rows={5} className="input resize-none" placeholder="The moment, the people, the occasion…" />
+                <textarea
+                  required
+                  rows={5}
+                  className="input resize-none"
+                  placeholder="The moment, the people, the occasion…"
+                />
               </Field>
               <button
                 type="submit"
@@ -73,14 +87,16 @@ function Contact() {
             <div className="space-y-10">
               <div>
                 <h3 className="font-display text-3xl mb-2">Studio</h3>
-                <p className="text-muted-foreground">By appointment only. We host scan days in cities nationwide — book yours below.</p>
+                <p className="text-muted-foreground">
+                  By appointment only. We host scan days in cities nationwide, book yours below.
+                </p>
               </div>
               <ul className="space-y-5">
                 {[
-                  { icon: Mail, t: "hello@memory3d.com" },
-                  { icon: Phone, t: "(555) 010-3DXX" },
+                  { icon: Mail, t: "support@memory3d.com" },
+                  { icon: Phone, t: "888-936-3667" },
                   { icon: MapPin, t: "Nationwide pop-up scans" },
-                  { icon: Calendar, t: "Mon — Sat, 9am – 7pm" },
+                  { icon: Calendar, t: "Mon - Sat, 9am – 7pm" },
                 ].map(({ icon: I, t }) => (
                   <li key={t} className="flex items-center gap-4">
                     <span className="w-11 h-11 grid place-items-center border border-gold/40 rounded-sm">
@@ -91,8 +107,13 @@ function Contact() {
                 ))}
               </ul>
               <div className="hairline pt-8">
-                <p className="text-[11px] tracking-[0.3em] uppercase text-gold mb-3">Wedding & Event Inquiries</p>
-                <p className="text-muted-foreground">For wedding parties, corporate gifting, and group scans (10+ people), email events@memory3d.com for a custom quote.</p>
+                <p className="text-[11px] tracking-[0.3em] uppercase text-gold mb-3">
+                  Wedding & Event Inquiries
+                </p>
+                <p className="text-muted-foreground">
+                  For wedding parties, corporate gifting, and group scans (10+ people), email
+                  events@memory3d.com for a custom quote.
+                </p>
               </div>
             </div>
           </Reveal>
@@ -119,7 +140,9 @@ function Contact() {
 function Field({ label, children }: { label: string; children: React.ReactNode }) {
   return (
     <label className="block">
-      <span className="block text-[10px] tracking-[0.3em] uppercase text-muted-foreground mb-2">{label}</span>
+      <span className="block text-[10px] tracking-[0.3em] uppercase text-muted-foreground mb-2">
+        {label}
+      </span>
       {children}
     </label>
   );
