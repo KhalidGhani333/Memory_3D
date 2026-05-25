@@ -1,6 +1,6 @@
 ## CONTEXT
 
-I have a Next.js 14 project with TypeScript, Tailwind CSS, shadcn/ui, and Framer Motion already set up. I need you to build the **Shop page (`/shop`) and Product Configurator** for Memory3D — a 3D crystal gift store.
+I have a Next.js 14 project with TypeScript, Tailwind CSS, shadcn/ui, and Framer Motion already set up. I need you to build the **Shop page (`/shop`) and Product Configurator** for Memory3D -  a 3D crystal gift store.
 
 The reference store is: **https://global.3dcrystalglobal.com/store/Memory3D/**
 
@@ -10,14 +10,14 @@ I have already studied exactly how it works. You must replicate its complete log
 
 ## HOW THE REFERENCE STORE WORKS (read every word)
 
-### Step 1 — Shape/Frame Selection (horizontal swipeable row)
+### Step 1 -  Shape/Frame Selection (horizontal swipeable row)
 
 The user picks a crystal **shape** from a horizontal scrollable thumbnail row at the top. There are 17 shapes total. When a shape is selected, it gets an orange border highlight. The selected shape determines:
 
 - Which **size options** appear below (each shape has its own size list)
 - Which **"upload preview" image** is shown in the upload zone
 
-### Step 2 — Size Selection (grid of clickable cards)
+### Step 2 -  Size Selection (grid of clickable cards)
 
 After picking a shape, 2–7 size buttons appear in a 2-column grid. Each size card shows:
 
@@ -28,7 +28,7 @@ After picking a shape, 2–7 size buttons appear in a 2-column grid. Each size c
 
 Clicking a size card selects it (orange border) and updates the **Total Price** at the bottom in real time.
 
-### Step 3 — Photo Upload
+### Step 3 -  Photo Upload
 
 A large dashed-border upload zone below the sizes. It shows:
 
@@ -37,7 +37,7 @@ A large dashed-border upload zone below the sizes. It shows:
 - "Start Over" link to clear the photo
   After upload, a **preview thumbnail** of the user's image appears inside the zone.
 
-### Step 4 — Add-on Selection (checklist below upload)
+### Step 4 -  Add-on Selection (checklist below upload)
 
 A vertical list of optional add-on products, each with:
 
@@ -49,11 +49,11 @@ A vertical list of optional add-on products, each with:
 
 The add-on list is the SAME for all shapes. Checking/unchecking each one updates the Total Price instantly.
 
-### Step 5 — Custom Inscription (optional text)
+### Step 5 -  Custom Inscription (optional text)
 
-A text input field: "CUSTOM INSCRIPTION $10" — adds $10 to total when filled.
+A text input field: "CUSTOM INSCRIPTION $10" -  adds $10 to total when filled.
 
-### Step 6 — Customer Details Form
+### Step 6 -  Customer Details Form
 
 Fields (all required unless noted):
 
@@ -62,7 +62,7 @@ Fields (all required unless noted):
 - Phone (note: same)
 - Purchase Location (textarea, optional)
 
-### Step 7 — Shipping Details
+### Step 7 -  Shipping Details
 
 A toggle between two modes:
 
@@ -79,26 +79,26 @@ When "Shipping To Home" is selected, show:
 
 Shipping options (radio buttons):
 
-- Free Store Pickup — 1-2 business days — $0
-- Free Shipping — 3-7 business days — $0
-- Fast Shipping — 1-2 business days — $25
+- Free Store Pickup -  1-2 business days -  $0
+- Free Shipping -  3-7 business days -  $0
+- Fast Shipping -  1-2 business days -  $25
 
-### Step 8 — Total Price Display
+### Step 8 -  Total Price Display
 
 A live-updating total at the bottom:
 
 - Shows "SHIPPING PRICE" line
 - Shows "TOTAL PRICE $ X.XX" in large bold text (orange/gold color)
-- "ADD TO CART" button — full width, dark background, white text
+- "ADD TO CART" button -  full width, dark background, white text
 
-### Step 9 — Contact Info Footer Strip
+### Step 9 -  Contact Info Footer Strip
 
 - support@memory3d.com
 - 888-936-3667
 
 ---
 
-## EXACT DATA — All Shapes and Their Sizes
+## EXACT DATA -  All Shapes and Their Sizes
 
 Build this as `/data/products.ts`. Use it as the single source of truth.
 
@@ -444,7 +444,7 @@ export const shapes: Shape[] = [
 
 ---
 
-## EXACT DATA — All Add-ons
+## EXACT DATA -  All Add-ons
 
 ```typescript
 // Add to /data/products.ts
@@ -707,9 +707,9 @@ _Shipping Details section:_
   - City input
   - Zip/Postal Code input
   - Shipping option radio group:
-    - Free Store Pickup — 1-2 business days — $0
-    - Free Shipping — 3-7 business days — $0
-    - Fast — 1-2 business days — $25
+    - Free Store Pickup -  1-2 business days -  $0
+    - Free Shipping -  3-7 business days -  $0
+    - Fast -  1-2 business days -  $25
   - Selected shipping option price feeds into total via `onShippingChange(price)` prop
 - When "Collect From Store": hide address fields
 
@@ -728,7 +728,7 @@ TOTAL PRICE: $ X.XX   ← large, bold, gold/orange color
 
 "ADD TO CART" behavior: validates that a shape, size, and photo are all selected. If any are missing, show a shadcn `toast` with the missing field. On success, show a success toast.
 
-### 9. `/app/shop/page.tsx` — Main Orchestrator
+### 9. `/app/shop/page.tsx` -  Main Orchestrator
 
 This page holds all state and composes the components:
 
@@ -835,7 +835,7 @@ export default function ShopPage() {
 ## STYLING RULES
 
 - The shop page uses a **centered single-column layout** (max-width ~640px), like the reference store
-- Color for all labels, selected borders, price amounts, section headers: your project's **gold token** (`#C9A84C`) — or use `text-orange-500` as a fallback if gold token isn't set
+- Color for all labels, selected borders, price amounts, section headers: your project's **gold token** (`#C9A84C`) -  or use `text-orange-500` as a fallback if gold token isn't set
 - Size card selected state: `border-2 border-gold` + checkmark icon
 - Shape thumbnail selected state: `border-2 border-gold ring-2 ring-gold/30`
 - Upload zone: `border-2 border-dashed border-gray-300 rounded-xl` with min-height 200px
@@ -859,31 +859,31 @@ Before allowing "Add to Cart":
 
 1. A shape must be selected ✓ (always true, default is first shape)
 2. A size must be selected ✓ (always true, default is first size of shape)
-3. A photo must be uploaded ✗ — if missing, show toast: "Please upload your photo to continue."
-4. Full Name, Email, Phone must be filled — if missing, show toast with field name.
+3. A photo must be uploaded ✗ -  if missing, show toast: "Please upload your photo to continue."
+4. Full Name, Email, Phone must be filled -  if missing, show toast with field name.
 
 ---
 
 ## WHAT NOT TO DO
 
-- Do NOT create a separate `/shop/[productId]` page — the reference store uses ONE page for all products, with shape selection at the top
-- Do NOT show a product grid/catalog — the shop IS the configurator
-- Do NOT use a multi-step wizard/modal — everything is on one scrollable page, exactly like the reference
-- Do NOT omit any shape or size from the data — all 18 shapes and their exact sizes and prices must be present
+- Do NOT create a separate `/shop/[productId]` page -  the reference store uses ONE page for all products, with shape selection at the top
+- Do NOT show a product grid/catalog -  the shop IS the configurator
+- Do NOT use a multi-step wizard/modal -  everything is on one scrollable page, exactly like the reference
+- Do NOT omit any shape or size from the data -  all 18 shapes and their exact sizes and prices must be present
 - Do NOT hardcode prices anywhere except `/data/products.ts`
 
 ---
 
 ## SUMMARY OF WHAT TO BUILD
 
-1. `/data/products.ts` — all shapes + sizes + addons data
-2. `/components/shop/ShapeSelector.tsx` — horizontal swipeable shape picker
-3. `/components/shop/SizeSelector.tsx` — 2-col grid of size cards with live price
-4. `/components/shop/PhotoUpload.tsx` — drag-drop upload with preview
-5. `/components/shop/AddonList.tsx` — checkbox list with qty selectors
-6. `/components/shop/PriceCalculator.ts` — pure total calculation utility
-7. `/components/shop/CustomerForm.tsx` — details + shipping form
-8. `/components/shop/TotalBar.tsx` — live total + Add to Cart CTA
-9. `/app/shop/page.tsx` — main page orchestrating all components with shared state
+1. `/data/products.ts` -  all shapes + sizes + addons data
+2. `/components/shop/ShapeSelector.tsx` -  horizontal swipeable shape picker
+3. `/components/shop/SizeSelector.tsx` -  2-col grid of size cards with live price
+4. `/components/shop/PhotoUpload.tsx` -  drag-drop upload with preview
+5. `/components/shop/AddonList.tsx` -  checkbox list with qty selectors
+6. `/components/shop/PriceCalculator.ts` -  pure total calculation utility
+7. `/components/shop/CustomerForm.tsx` -  details + shipping form
+8. `/components/shop/TotalBar.tsx` -  live total + Add to Cart CTA
+9. `/app/shop/page.tsx` -  main page orchestrating all components with shared state
 
 Build all 9 files now.

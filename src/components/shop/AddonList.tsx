@@ -26,7 +26,7 @@ export function AddonList({ addons, selectedAddons, onAddonChange }: AddonListPr
             key={addon.id}
             className="py-8 flex items-center gap-6 border-b border-border/60 last:border-0 group"
           >
-            <div className="w-24 h-24 rounded-sm overflow-hidden bg-card border border-border flex-shrink-0 flex items-center justify-center p-2">
+            <div className="w-24 h-24 rounded-xl overflow-hidden bg-card border border-border flex-shrink-0 flex items-center justify-center p-2">
               <img
                 src={addon.image}
                 alt={addon.label}

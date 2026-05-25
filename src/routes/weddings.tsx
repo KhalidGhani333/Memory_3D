@@ -11,13 +11,13 @@ import pSilver from "@/assets/product-lightbase-silver-heart.webp";
 export const Route = createFileRoute("/weddings")({
   head: () => ({
     meta: [
-      { title: "Wedding Crystals — Memory3D" },
+      { title: "Wedding Crystals -  Memory3D" },
       {
         name: "description",
         content:
-          "Capture your wedding day inside premium 3D crystal. First dance, vows, the kiss — preserved forever.",
+          "Capture your wedding day inside premium 3D crystal. First dance, vows, the kiss -  preserved forever.",
       },
-      { property: "og:title", content: "Wedding Crystals — Memory3D" },
+      { property: "og:title", content: "Wedding Crystals -  Memory3D" },
       { property: "og:description", content: "The most beautiful day, forever in crystal." },
       { property: "og:image", content: cover },
     ],
@@ -89,7 +89,7 @@ function Weddings() {
               "We surprised each other with crystals on our first anniversary. It's the best gift
               we've ever given."
             </h2>
-            <p className="mt-6 text-gold text-[11px] tracking-[0.3em] uppercase">— Marcus & Jen</p>
+            <p className="mt-6 text-gold text-[11px] tracking-[0.3em] uppercase">-  Marcus & Jen</p>
           </Reveal>
         </div>
       </section>

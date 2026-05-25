@@ -7,13 +7,13 @@ import sculp from "@/assets/Memory3D_Sculptures_1.avif";
 export const Route = createFileRoute("/about")({
   head: () => ({
     meta: [
-      { title: "About Memory3D — The Art of Crystal Keepsakes" },
+      { title: "About Memory3D -  The Art of Crystal Keepsakes" },
       {
         name: "description",
         content:
           "We carve memory into crystal. Meet the studio, the artisans and the process behind every Memory3D piece.",
       },
-      { property: "og:title", content: "About — Memory3D" },
+      { property: "og:title", content: "About -  Memory3D" },
       { property: "og:description", content: "The art of crystal keepsakes." },
       { property: "og:image", content: hero },
     ],

@@ -18,7 +18,7 @@ export function SizeSelector({ sizes, selectedSizeId, onSizeChange }: SizeSelect
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: i * 0.05 }}
           onClick={() => onSizeChange(size)}
-          className={`relative p-5 text-left transition-all border-2 rounded-sm flex flex-col justify-between h-full group ${
+          className={`relative p-5 text-left transition-all border-2 rounded-xl flex flex-col justify-between h-full group ${
             selectedSizeId === size.id
               ? "border-gold bg-gold/5 shadow-gold/10 shadow-lg"
               : "border-border hover:border-gold/30 bg-card/60"

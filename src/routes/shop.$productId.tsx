@@ -19,31 +19,31 @@ export const Route = createFileRoute("/shop/$productId")({
 
 const productDescriptions: Record<string, string> = {
   "rectangle-tall":
-    "Our most versatile crystal — the timeless portrait format works beautifully with individuals, couples, and small groups. Laser-etched with millions of micro-points for incredible 3D depth.",
+    "Our most versatile crystal -  the timeless portrait format works beautifully with individuals, couples, and small groups. Laser-etched with millions of micro-points for incredible 3D depth.",
   "rectangle-wide":
     "Perfect for landscape and group shots. The wide format captures more of your scene, making it ideal for family gatherings, sports teams, and panoramic memories.",
   heart:
     "Our signature wedding and anniversary crystal. The heart shape catches light from every angle, making it a breathtaking centrepiece in any home.",
   prestige:
     "The Prestige series features beveled edges and an extra-thick optical base that creates a floating 3D effect unlike any other crystal we make.",
-  ball: "A flawless sphere of optical crystal — no edges, no angles. Your photo engraved inside a perfect ball is truly mesmerizing from every direction.",
+  ball: "A flawless sphere of optical crystal -  no edges, no angles. Your photo engraved inside a perfect ball is truly mesmerizing from every direction.",
   "cut-corner-diamond":
     "Compact and striking. The diamond cut with angled corners makes this our best-value crystal without compromising on optical quality.",
   candle:
     "Cylindrical and elegant, the Candle crystal is designed to sit on any of our lightbases. The cylindrical form rotates light through your image beautifully.",
-  urn: "A dignified memorial tribute. The Urn shape is designed for those honouring a loved one or beloved pet — a lasting keepsake to hold their memory.",
+  urn: "A dignified memorial tribute. The Urn shape is designed for those honouring a loved one or beloved pet -  a lasting keepsake to hold their memory.",
   "notched-tall":
     "A contemporary take on the classic portrait. The distinctive notched top gives this crystal a modern architectural quality.",
   "notched-wide":
     "Wide-format crystal with a signature notched top. Ideal for landscape and group photos with a modern aesthetic.",
   "desk-lamp":
-    "Crystal meets function. Your engraved crystal is built directly into an elegant desk lamp — art you live with every day.",
+    "Crystal meets function. Your engraved crystal is built directly into an elegant desk lamp -  art you live with every day.",
   ornament:
     "Perfect for the holidays or as a year-round keepsake. Hang your cherished memory on the tree or display it on a stand.",
   "vertical-keychain":
     "Carry your memory wherever you go. Our precision-engraved vertical keychain is crafted in optical crystal and made to last.",
   "horizontal-keychain":
-    "Sleek horizontal crystal keychain — the perfect way to keep someone close every single day.",
+    "Sleek horizontal crystal keychain -  the perfect way to keep someone close every single day.",
   "heart-keychain":
     "A heart-shaped crystal keychain that makes the most meaningful small gift for a loved one.",
   "heart-necklace":
@@ -51,12 +51,12 @@ const productDescriptions: Record<string, string> = {
   "dog-bone-vertical":
     "A loving tribute to your best friend. The dog bone shape honours your pet's memory in beautiful 3D crystal.",
   "dog-bone-horizontal":
-    "Horizontal dog bone crystal — a deeply personal memorial for the pet who meant the world to you.",
+    "Horizontal dog bone crystal -  a deeply personal memorial for the pet who meant the world to you.",
 };
 
 const trustBadges = [
   { icon: Shield, label: "Premium Optical Crystal" },
-  { icon: Star, label: "4.9★ — 12k+ Reviews" },
+  { icon: Star, label: "4.9★ -  12k+ Reviews" },
   { icon: Truck, label: "10–14 Day Delivery" },
   { icon: RotateCcw, label: "Satisfaction Guaranteed" },
 ];
@@ -109,7 +109,7 @@ function ProductPage() {
       shapeLabel: shape.label,
       sizeId: selectedSize.id,
       sizeLabel: selectedSize.label,
-      price: 0,
+      price: totals.total,
       photo: uploadedPhoto ? URL.createObjectURL(uploadedPhoto) : "",
       addons: addons
         .filter((a) => selectedAddons[a.id]?.checked)
@@ -124,7 +124,7 @@ function ProductPage() {
     });
     toast.success(`${shape.label} added to cart! We'll review your photo shortly.`);
     navigate({ to: "/cart" });
-  }, [shape, selectedSize, uploadedPhoto, selectedAddons, inscriptionText, addItem, navigate]);
+  }, [shape, selectedSize, uploadedPhoto, selectedAddons, inscriptionText, addItem, navigate, totals.total]);
 
   // Product not found
   if (!shape) {
@@ -135,7 +135,7 @@ function ProductPage() {
           <p className="text-muted-foreground mb-8">This crystal hasn't been carved yet.</p>
           <Link
             to="/shop"
-            className="bg-gradient-gold text-white px-8 py-4 text-[11px] tracking-[0.3em] uppercase rounded-sm shadow-gold font-bold"
+            className="btn-shine bg-gradient-gold text-white px-8 py-4 text-[11px] tracking-[0.3em] uppercase rounded-full shadow-gold font-bold hover:-translate-y-px transition-all duration-300"
           >
             Back to Shop
           </Link>
@@ -186,7 +186,7 @@ function ProductPage() {
             <Reveal>
               <div className="lg:sticky lg:top-28">
                 {/* Main Image */}
-                <div className="aspect-square bg-card border border-border rounded-sm shadow-sm flex items-center justify-center p-12 relative overflow-hidden">
+                <div className="aspect-square bg-card border border-border rounded-2xl shadow-card flex items-center justify-center p-12 relative overflow-hidden">
                   <div className="absolute inset-0 bg-gradient-to-br from-gold/5 via-transparent to-transparent" />
                   <motion.img
                     key={shape.id}
@@ -204,7 +204,7 @@ function ProductPage() {
 
                 {/* Thumb strip */}
                 <div className="flex gap-3 mt-4">
-                  <div className="w-16 h-16 border-2 border-gold/40 rounded-sm overflow-hidden flex items-center justify-center bg-card p-2 shadow-sm">
+                  <div className="w-16 h-16 border-2 border-gold/40 rounded-xl overflow-hidden flex items-center justify-center bg-card p-2 shadow-sm">
                     <img
                       src={shape.thumbImage}
                       alt={shape.label}
@@ -218,7 +218,7 @@ function ProductPage() {
                   {trustBadges.map(({ icon: I, label }) => (
                     <div
                       key={label}
-                      className="flex items-center gap-2.5 p-3 bg-card border border-border rounded-sm shadow-sm"
+                      className="flex items-center gap-2.5 p-3 bg-card border border-border rounded-xl shadow-sm"
                     >
                       <I className="w-4 h-4 text-gold shrink-0" />
                       <span className="text-[10px] tracking-[0.1em] text-muted-foreground font-medium leading-tight">
@@ -234,10 +234,8 @@ function ProductPage() {
             <div>
               <Reveal>
                 {/* Product Header */}
-                <div className="mb-2">
-                  <span className="text-[10px] tracking-[0.3em] uppercase text-gold font-medium">
-                    3D Laser-Engraved Crystal
-                  </span>
+                <div className="mb-3">
+                  <span className="label-chip block">3D Laser-Engraved Crystal</span>
                 </div>
                 <h1 className="font-display text-4xl md:text-5xl text-foreground leading-tight mb-4">
                   {shape.label}
@@ -253,7 +251,7 @@ function ProductPage() {
                 <p className="text-muted-foreground leading-relaxed mb-8 text-base">{description}</p>
 
                 {/* Starting Price box */}
-                <div className="mb-10 p-5 bg-card border border-border rounded-sm shadow-sm">
+                <div className="mb-10 p-5 bg-card border border-border rounded-2xl shadow-card">
                   <p className="text-[10px] tracking-[0.3em] uppercase text-muted-foreground mb-1">
                     Starting from
                   </p>
@@ -335,11 +333,11 @@ function ProductPage() {
                   </h2>
                   <input
                     type="text"
-                    placeholder="Type your engraving text — names, dates, a short message…"
+                    placeholder="Type your engraving text -  names, dates, a short message…"
                     value={inscriptionText}
                     onChange={(e) => setInscriptionText(e.target.value)}
                     maxLength={80}
-                    className="w-full bg-card border border-border rounded-sm px-5 py-4 text-sm focus:border-gold outline-none transition-colors text-foreground placeholder:text-muted-foreground"
+                    className="w-full bg-card border border-border rounded-xl px-5 py-4 text-sm focus:border-gold outline-none transition-colors text-foreground placeholder:text-muted-foreground focus:shadow-[0_0_0_3px_oklch(0.62_0.14_79/0.1)]"
                   />
                   <p className="mt-2 text-[10px] text-muted-foreground">
                     {inscriptionText.length}/80 characters
@@ -364,7 +362,7 @@ function ProductPage() {
               <TotalBar
                 subtotal={totals.subtotal}
                 shippingPrice={totals.shipping}
-                total={0}
+                total={totals.total}
                 isReady={isReady}
                 missingFields={missingFields}
                 onAddToCart={handleAddToCart}
@@ -380,9 +378,7 @@ function ProductPage() {
           <Reveal>
             <div className="flex items-end justify-between mb-10">
               <div>
-                <span className="text-[11px] tracking-[0.35em] uppercase text-gold font-medium">
-                  Explore More
-                </span>
+                <span className="label-chip mb-3 block">Explore More</span>
                 <h2 className="font-display text-3xl md:text-4xl mt-2 text-foreground">
                   You might also like
                 </h2>
@@ -400,15 +396,15 @@ function ProductPage() {
             {related.map((s, i) => (
               <Reveal key={s.id} delay={i * 0.08}>
                 <Link to={`/shop/${s.id}`} className="group block">
-                  <div className="aspect-square bg-card border border-border rounded-sm overflow-hidden flex items-center justify-center p-6 group-hover:border-gold/40 group-hover:shadow-gold transition-all duration-500 shadow-sm">
+                  <div className="card-lift aspect-square bg-card border border-border/80 rounded-xl overflow-hidden flex items-center justify-center p-6 shadow-card mb-3">
                     <img
                       src={s.thumbImage}
                       alt={s.label}
-                      className="max-w-full max-h-full object-contain transition-transform duration-700 group-hover:scale-110"
+                      className="max-w-full max-h-full object-contain transition-transform duration-500 group-hover:scale-110"
                     />
                   </div>
-                  <div className="pt-3">
-                    <h3 className="font-display text-lg text-foreground group-hover:text-gold transition-colors">
+                  <div className="px-0.5">
+                    <h3 className="font-display text-lg text-foreground group-hover:text-gold transition-colors leading-snug">
                       {s.label}
                     </h3>
                     <p className="text-[10px] tracking-[0.2em] uppercase text-gold font-bold mt-1">

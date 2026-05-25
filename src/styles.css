@@ -39,7 +39,9 @@
 
 :root {
   --radius: 0.5rem;
-  /* Light luxury — warm ivory + champagne gold */
+  --banner-h: 34px;
+
+  /* Light luxury -  warm ivory + champagne gold */
   --background: oklch(0.99 0.003 85);
   --foreground: oklch(0.13 0.015 265);
   --ink: oklch(0.08 0.01 265);
@@ -78,6 +80,10 @@
   --shadow-luxe: 0 30px 60px -20px oklch(0.4 0.05 265 / 0.12),
     0 0 80px -20px oklch(0.62 0.14 79 / 0.10);
   --shadow-gold: 0 10px 40px -10px oklch(0.62 0.14 79 / 0.32);
+  --shadow-card: 0 2px 12px -2px oklch(0.4 0.02 265 / 0.08),
+    0 1px 3px oklch(0.4 0.02 265 / 0.05);
+  --shadow-card-hover: 0 16px 40px -8px oklch(0.4 0.02 265 / 0.12),
+    0 4px 12px -2px oklch(0.62 0.14 79 / 0.18);
 }
 
 @layer base {
@@ -93,6 +99,7 @@
     font-family: var(--font-sans);
     font-feature-settings: "ss01", "cv11";
     -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
   }
   h1,
   h2,
@@ -103,15 +110,18 @@
     letter-spacing: -0.01em;
   }
   ::selection {
-    background: var(--gold);
-    color: oklch(0.99 0.003 85);
+    background: oklch(0.76 0.12 83 / 0.35);
+    color: var(--foreground);
   }
 }
 
 @layer utilities {
+  /* ── Colors ── */
   .text-gold {
     color: var(--gold);
   }
+
+  /* ── Backgrounds ── */
   .bg-gradient-hero {
     background: var(--gradient-hero);
   }
@@ -121,26 +131,137 @@
   .bg-gradient-crystal {
     background: var(--gradient-crystal);
   }
+
+  /* ── Shadows ── */
   .shadow-luxe {
     box-shadow: var(--shadow-luxe);
   }
   .shadow-gold {
     box-shadow: var(--shadow-gold);
   }
+  .shadow-card {
+    box-shadow: var(--shadow-card);
+  }
+  .shadow-card-hover {
+    box-shadow: var(--shadow-card-hover);
+  }
+
+  /* ── Text gradient ── */
   .text-gradient-gold {
     background: var(--gradient-gold);
     -webkit-background-clip: text;
     background-clip: text;
     color: transparent;
   }
+
+  /* ── Dividers ── */
   .hairline {
-    border-top: 1px solid color-mix(in oklab, var(--gold) 25%, transparent);
+    border-top: 1px solid color-mix(in oklab, var(--gold) 22%, transparent);
   }
+
+  /* ── Scrollbar ── */
   .no-scrollbar {
     -ms-overflow-style: none;
     scrollbar-width: none;
   }
   .no-scrollbar::-webkit-scrollbar {
     display: none;
+  }
+
+  /* ── Nav link -  animated underline from center ── */
+  .nav-link {
+    position: relative;
+    padding-bottom: 3px;
+  }
+  .nav-link::after {
+    content: "";
+    position: absolute;
+    bottom: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 0;
+    height: 1.5px;
+    background: var(--gradient-gold);
+    border-radius: 99px;
+    transition: width 0.35s cubic-bezier(0.22, 1, 0.36, 1);
+  }
+  .nav-link:hover::after {
+    width: 100%;
+  }
+  .nav-link-active::after {
+    width: 100%;
+  }
+
+  /* ── Button shine sweep ── */
+  .btn-shine {
+    position: relative;
+    overflow: hidden;
+  }
+  .btn-shine::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: -80%;
+    width: 50%;
+    height: 100%;
+    background: linear-gradient(
+      90deg,
+      transparent,
+      oklch(1 0 0 / 0.22),
+      transparent
+    );
+    transform: skewX(-12deg);
+    transition: left 0.55s ease;
+    pointer-events: none;
+  }
+  .btn-shine:hover::before {
+    left: 160%;
+  }
+
+  /* ── Card lift hover ── */
+  .card-lift {
+    transition: transform 0.35s cubic-bezier(0.22, 1, 0.36, 1),
+      box-shadow 0.35s cubic-bezier(0.22, 1, 0.36, 1),
+      border-color 0.25s ease;
+  }
+  .card-lift:hover {
+    transform: translateY(-5px);
+    box-shadow: var(--shadow-card-hover);
+    border-color: oklch(0.62 0.14 79 / 0.35);
+  }
+
+  /* ── Pill badge ── */
+  .badge-gold {
+    display: inline-flex;
+    align-items: center;
+    padding: 0.25rem 0.65rem;
+    background: var(--gradient-gold);
+    color: white;
+    font-size: 0.6rem;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    font-weight: 700;
+    border-radius: 99px;
+    box-shadow: 0 2px 8px oklch(0.62 0.14 79 / 0.35);
+  }
+
+  /* ── Label chip ── */
+  .label-chip {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.35rem;
+    font-size: 0.65rem;
+    letter-spacing: 0.3em;
+    text-transform: uppercase;
+    font-weight: 600;
+    color: var(--gold);
+  }
+  .label-chip::before {
+    content: "";
+    display: block;
+    width: 20px;
+    height: 1px;
+    background: var(--gradient-gold);
+    border-radius: 99px;
   }
 }

@@ -55,7 +55,7 @@ Reset all modal state for next use
 3. Modify /app/shop/page.tsx
    The /shop page already has full configurator. Just make sure its ADD TO CART button:
 
-Dispatches to CartContext (not opens modal — modal is only for landing page)
+Dispatches to CartContext (not opens modal -  modal is only for landing page)
 Shows success toast
 Does NOT navigate away
 
@@ -78,10 +78,10 @@ Home page → click "Add to Cart" on any product card
 → Fills form → clicks Place Order → success confirmation shown
 Files to create/modify:
 
-/components/shop/QuickConfigModal.tsx — new
-/app/page.tsx — modify (add modal state + pass to product cards)
-/app/shop/page.tsx — no change needed to ADD TO CART logic
-/app/cart/page.tsx — already built
-/app/checkout/page.tsx — already built
+/components/shop/QuickConfigModal.tsx -  new
+/app/page.tsx -  modify (add modal state + pass to product cards)
+/app/shop/page.tsx -  no change needed to ADD TO CART logic
+/app/cart/page.tsx -  already built
+/app/checkout/page.tsx -  already built
 
 Build QuickConfigModal.tsx now and show me the modifications needed in app/page.tsx."\*\*

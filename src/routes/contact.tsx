@@ -7,13 +7,13 @@ import { toast } from "sonner";
 export const Route = createFileRoute("/contact")({
   head: () => ({
     meta: [
-      { title: "Contact & Schedule a Scan — Memory3D" },
+      { title: "Contact & Schedule a Scan -  Memory3D" },
       {
         name: "description",
         content:
           "Reach our studio, schedule a 3D body scan or get help personalizing your crystal keepsake.",
       },
-      { property: "og:title", content: "Contact — Memory3D" },
+      { property: "og:title", content: "Contact -  Memory3D" },
       { property: "og:description", content: "Talk to our crystal specialists." },
     ],
   }),
@@ -64,7 +64,7 @@ function Contact() {
                 onSubmit={(e) => {
                   e.preventDefault();
                   setSent(true);
-                  toast.success("Message sent — we'll be in touch within 24 hours.");
+                  toast.success("Message sent -  we'll be in touch within 24 hours.");
                 }}
                 className="space-y-5"
               >

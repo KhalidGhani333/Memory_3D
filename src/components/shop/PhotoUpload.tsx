@@ -76,7 +76,7 @@ export function PhotoUpload({ shapePreviewImage, onPhotoChange }: PhotoUploadPro
             <img
               src={preview}
               alt="Preview"
-              className="max-h-[200px] rounded-sm shadow-luxe object-contain"
+              className="max-h-[200px] rounded-xl shadow-luxe object-contain"
             />
           </div>
         ) : (

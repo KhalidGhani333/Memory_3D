@@ -14,13 +14,13 @@ import s7 from "@/assets/3D-Sculp-7.jpg";
 export const Route = createFileRoute("/sculptures")({
   head: () => ({
     meta: [
-      { title: "3D Sculptures — Full-Color Figurines of You | Memory3D" },
+      { title: "3D Sculptures -  Full-Color Figurines of You | Memory3D" },
       {
         name: "description",
         content:
           "Step into our scanner and walk out with a full-color sculpture of yourself, your family or your pet. Crafted to the last detail.",
       },
-      { property: "og:title", content: "3D Sculptures — Memory3D" },
+      { property: "og:title", content: "3D Sculptures -  Memory3D" },
       {
         property: "og:description",
         content: "Full-color hand-finished figurines from a 12-second scan.",

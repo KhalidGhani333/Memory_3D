@@ -101,14 +101,14 @@ export function Footer() {
               <a
                 aria-label="Instagram"
                 href="#"
-                className="w-9 h-9 grid place-items-center border border-border hover:border-gold hover:text-gold transition rounded-sm text-muted-foreground"
+                className="w-9 h-9 grid place-items-center border border-border hover:border-gold hover:text-gold transition-all duration-200 rounded-full text-muted-foreground hover:bg-gold/5"
               >
                 <Instagram className="w-4 h-4" />
               </a>
               <a
                 aria-label="Facebook"
                 href="#"
-                className="w-9 h-9 grid place-items-center border border-border hover:border-gold hover:text-gold transition rounded-sm text-muted-foreground"
+                className="w-9 h-9 grid place-items-center border border-border hover:border-gold hover:text-gold transition-all duration-200 rounded-full text-muted-foreground hover:bg-gold/5"
               >
                 <Facebook className="w-4 h-4" />
               </a>

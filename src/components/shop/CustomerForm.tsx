@@ -46,7 +46,7 @@ export function CustomerForm({ onShippingChange, onFormChange }: CustomerFormPro
             <Input
               id="name"
               placeholder="Enter your full name"
-              className="rounded-sm"
+              className="rounded-xl"
               onChange={(e) => onFormChange({ name: e.target.value })}
             />
           </div>
@@ -63,7 +63,7 @@ export function CustomerForm({ onShippingChange, onFormChange }: CustomerFormPro
                 id="email"
                 type="email"
                 placeholder="Enter your email address"
-                className="rounded-sm"
+                className="rounded-xl"
               />
               <p className="text-[9px] text-muted-foreground italic">
                 We will notify you when your order is ready.
@@ -80,7 +80,7 @@ export function CustomerForm({ onShippingChange, onFormChange }: CustomerFormPro
                 id="phone"
                 type="tel"
                 placeholder="Enter your phone number"
-                className="rounded-sm"
+                className="rounded-xl"
               />
             </div>
           </div>
@@ -95,7 +95,7 @@ export function CustomerForm({ onShippingChange, onFormChange }: CustomerFormPro
             <Textarea
               id="location"
               placeholder="Example: Social media, friend, search engine..."
-              className="rounded-sm min-h-[80px]"
+              className="rounded-xl min-h-[80px]"
             />
           </div>
         </div>
@@ -107,12 +107,12 @@ export function CustomerForm({ onShippingChange, onFormChange }: CustomerFormPro
           Shipping Details
         </h2>
 
-        <div className="flex gap-2 p-1 bg-card/50 border border-border rounded-sm">
+        <div className="flex gap-2 p-1.5 bg-muted border border-border rounded-full">
           <button
             onClick={() => handleModeChange("home")}
-            className={`flex-1 py-3 text-[10px] tracking-[0.2em] uppercase font-bold transition-all rounded-sm ${
+            className={`flex-1 py-2.5 text-[10px] tracking-[0.2em] uppercase font-bold transition-all duration-300 rounded-full ${
               shippingMode === "home"
-                ? "bg-gold text-primary-foreground shadow-gold/20"
+                ? "bg-gradient-gold text-white shadow-gold"
                 : "text-muted-foreground hover:text-foreground"
             }`}
           >
@@ -120,9 +120,9 @@ export function CustomerForm({ onShippingChange, onFormChange }: CustomerFormPro
           </button>
           <button
             onClick={() => handleModeChange("store")}
-            className={`flex-1 py-3 text-[10px] tracking-[0.2em] uppercase font-bold transition-all rounded-sm ${
+            className={`flex-1 py-2.5 text-[10px] tracking-[0.2em] uppercase font-bold transition-all duration-300 rounded-full ${
               shippingMode === "store"
-                ? "bg-gold text-primary-foreground shadow-gold/20"
+                ? "bg-gradient-gold text-white shadow-gold"
                 : "text-muted-foreground hover:text-foreground"
             }`}
           >
@@ -141,7 +141,7 @@ export function CustomerForm({ onShippingChange, onFormChange }: CustomerFormPro
                 Country *
               </Label>
               <Select defaultValue="us">
-                <SelectTrigger className="rounded-sm">
+                <SelectTrigger className="rounded-xl">
                   <SelectValue placeholder="Select Country" />
                 </SelectTrigger>
                 <SelectContent>
@@ -155,7 +155,7 @@ export function CustomerForm({ onShippingChange, onFormChange }: CustomerFormPro
               <Label className="text-[10px] uppercase tracking-wider text-muted-foreground">
                 Street Address *
               </Label>
-              <Input placeholder="Enter your street address" className="rounded-sm" />
+              <Input placeholder="Enter your street address" className="rounded-xl" />
             </div>
 
             <div className="grid sm:grid-cols-2 gap-4">
@@ -163,13 +163,13 @@ export function CustomerForm({ onShippingChange, onFormChange }: CustomerFormPro
                 <Label className="text-[10px] uppercase tracking-wider text-muted-foreground">
                   City *
                 </Label>
-                <Input placeholder="Enter your city" className="rounded-sm" />
+                <Input placeholder="Enter your city" className="rounded-xl" />
               </div>
               <div className="space-y-2">
                 <Label className="text-[10px] uppercase tracking-wider text-muted-foreground">
                   State / Province *
                 </Label>
-                <Input placeholder="Enter your state/province" className="rounded-sm" />
+                <Input placeholder="Enter your state/province" className="rounded-xl" />
               </div>
             </div>
 
@@ -177,7 +177,7 @@ export function CustomerForm({ onShippingChange, onFormChange }: CustomerFormPro
               <Label className="text-[10px] uppercase tracking-wider text-muted-foreground">
                 Zip / Postal Code *
               </Label>
-              <Input placeholder="Enter your zip/postal code" className="rounded-sm" />
+              <Input placeholder="Enter your zip/postal code" className="rounded-xl" />
             </div>
 
             <div className="space-y-4 pt-4">
@@ -188,22 +188,22 @@ export function CustomerForm({ onShippingChange, onFormChange }: CustomerFormPro
                 defaultValue="standard"
                 onValueChange={(val) => onShippingChange(val === "fast" ? 25 : 0)}
               >
-                <div className="flex items-center space-x-3 p-4 border border-border rounded-sm bg-card/30">
+                <div className="flex items-center space-x-3 p-4 border border-border rounded-xl bg-card/30 hover:border-gold/30 transition-colors">
                   <RadioGroupItem value="standard" id="s1" className="border-gold text-gold" />
                   <Label htmlFor="s1" className="flex-1 cursor-pointer">
                     <div className="text-[11px] font-bold uppercase tracking-wider">
                       Free Shipping
                     </div>
-                    <div className="text-[10px] text-muted-foreground">3-7 business days — $0</div>
+                    <div className="text-[10px] text-muted-foreground">3-7 business days -  $0</div>
                   </Label>
                 </div>
-                <div className="flex items-center space-x-3 p-4 border border-border rounded-sm bg-card/30">
+                <div className="flex items-center space-x-3 p-4 border border-border rounded-xl bg-card/30 hover:border-gold/30 transition-colors">
                   <RadioGroupItem value="fast" id="s2" className="border-gold text-gold" />
                   <Label htmlFor="s2" className="flex-1 cursor-pointer">
                     <div className="text-[11px] font-bold uppercase tracking-wider text-gold">
                       Fast Shipping
                     </div>
-                    <div className="text-[10px] text-muted-foreground">1-2 business days — $25</div>
+                    <div className="text-[10px] text-muted-foreground">1-2 business days -  $25</div>
                   </Label>
                 </div>
               </RadioGroup>
@@ -215,7 +215,7 @@ export function CustomerForm({ onShippingChange, onFormChange }: CustomerFormPro
           <motion.div
             initial={{ opacity: 0, height: 0 }}
             animate={{ opacity: 1, height: "auto" }}
-            className="p-6 border border-gold/30 bg-gold/5 rounded-sm text-center"
+            className="p-6 border border-gold/30 bg-gold/5 rounded-2xl text-center"
           >
             <div className="text-[11px] font-bold uppercase tracking-widest text-gold mb-2">
               Free Store Pickup

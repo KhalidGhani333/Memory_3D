@@ -10,13 +10,13 @@ import m7 from "@/assets/memory_7.avif";
 export const Route = createFileRoute("/memorials")({
   head: () => ({
     meta: [
-      { title: "Memorial Crystals — Memory3D" },
+      { title: "Memorial Crystals -  Memory3D" },
       {
         name: "description",
         content:
           "Honor a loved one with a 3D crystal keepsake. A way to hold their memory in your hands forever.",
       },
-      { property: "og:title", content: "Memorial Crystals — Memory3D" },
+      { property: "og:title", content: "Memorial Crystals -  Memory3D" },
       { property: "og:description", content: "Forever, in your hands." },
       { property: "og:image", content: cover },
     ],
@@ -56,7 +56,7 @@ function Memorials() {
               "I cried when I unboxed it. My mother is gone but I see her every morning now. Thank
               you."
             </p>
-            <p className="mt-6 text-gold text-[11px] tracking-[0.3em] uppercase">— Sarah L.</p>
+            <p className="mt-6 text-gold text-[11px] tracking-[0.3em] uppercase">-  Sarah L.</p>
           </Reveal>
         </div>
       </section>

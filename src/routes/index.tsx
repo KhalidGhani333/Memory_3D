@@ -55,13 +55,13 @@ import pWood from "@/assets/product-wooden-premium.webp";
 export const Route = createFileRoute("/")({
   head: () => ({
     meta: [
-      { title: "Memory3D — Forever in Crystal | 3D Laser-Engraved Gifts" },
+      { title: "Memory3D -  Forever in Crystal | 3D Laser-Engraved Gifts" },
       {
         name: "description",
         content:
-          "Turn your most precious moments into stunning 3D laser-engraved crystals and full-color sculptures. Weddings, memorials, pets and milestones — preserved forever.",
+          "Turn your most precious moments into stunning 3D laser-engraved crystals and full-color sculptures. Weddings, memorials, pets and milestones -  preserved forever.",
       },
-      { property: "og:title", content: "Memory3D — Forever in Crystal" },
+      { property: "og:title", content: "Memory3D -  Forever in Crystal" },
       {
         property: "og:description",
         content:
@@ -201,14 +201,14 @@ function Home() {
               <div className="mt-10 flex flex-col sm:flex-row gap-4">
                 <Link
                   to="/shop"
-                  className="group inline-flex items-center justify-center gap-3 bg-gradient-gold text-white px-9 py-4 text-[11px] tracking-[0.3em] uppercase shadow-gold rounded-sm hover:translate-y-[-2px] transition-transform font-bold"
+                  className="btn-shine group inline-flex items-center justify-center gap-3 bg-gradient-gold text-white px-9 py-4 text-[11px] tracking-[0.3em] uppercase shadow-gold rounded-full hover:-translate-y-px transition-all duration-300 font-bold hover:shadow-[0_8px_28px_-4px_oklch(0.62_0.14_79/0.55)]"
                 >
                   Shop Crystals{" "}
                   <ArrowRight className="w-4 h-4 transition-transform group-hover:translate-x-1" />
                 </Link>
                 <Link
                   to="/contact"
-                  className="inline-flex items-center justify-center gap-3 border border-gold/50 text-foreground px-9 py-4 text-[11px] tracking-[0.3em] uppercase hover:bg-gold/10 hover:border-gold rounded-sm transition font-medium"
+                  className="inline-flex items-center justify-center gap-3 border border-gold/50 text-foreground px-9 py-4 text-[11px] tracking-[0.3em] uppercase hover:bg-gold/5 hover:border-gold rounded-full transition-all duration-300 font-medium"
                 >
                   Schedule a Scan
                 </Link>
@@ -249,9 +249,7 @@ function Home() {
         <div className="max-w-7xl mx-auto px-6 lg:px-10">
           <Reveal>
             <div className="text-center max-w-2xl mx-auto mb-20">
-              <span className="text-[11px] tracking-[0.35em] uppercase text-gold font-medium">
-                Collections
-              </span>
+              <span className="label-chip justify-center mb-4 block">Collections</span>
               <h2 className="font-display text-5xl md:text-6xl mt-4 text-foreground">
                 A keepsake for every <em className="text-gradient-gold not-italic">chapter</em>.
               </h2>
@@ -263,16 +261,16 @@ function Home() {
               <Reveal key={cat.title} delay={i * 0.08}>
                 <Link
                   to={cat.to}
-                  className="group block relative aspect-[3/4] overflow-hidden rounded-sm shadow-sm"
+                  className="group block relative aspect-[3/4] overflow-hidden rounded-2xl shadow-sm"
                 >
                   <img
                     src={cat.img}
                     alt={cat.title}
                     className="absolute inset-0 w-full h-full object-cover transition-transform duration-[1500ms] group-hover:scale-110"
                   />
-                  {/* Dark overlay for image cards — always dark for readability */}
+                  {/* Dark overlay for image cards -  always dark for readability */}
                   <div className="absolute inset-0 bg-gradient-to-t from-black/85 via-black/30 to-transparent" />
-                  <div className="absolute inset-0 border border-white/0 group-hover:border-gold/50 transition-colors duration-500" />
+                  <div className="absolute inset-0 rounded-2xl border border-white/0 group-hover:border-gold/50 transition-colors duration-500" />
                   <div className="absolute bottom-0 left-0 right-0 p-7">
                     <h3 className="font-display text-3xl text-white mb-2">{cat.title}</h3>
                     <p className="text-sm text-white/70 mb-4">{cat.copy}</p>
@@ -294,9 +292,7 @@ function Home() {
           <div className="flex flex-col md:flex-row md:items-end justify-between gap-6">
             <Reveal>
               <div>
-                <span className="text-[11px] tracking-[0.35em] uppercase text-gold font-medium">
-                  Featured
-                </span>
+                <span className="label-chip mb-4 block">Featured</span>
                 <h2 className="font-display text-5xl md:text-6xl mt-4 text-foreground max-w-xl">
                   The pieces everyone's gifting.
                 </h2>
@@ -327,13 +323,13 @@ function Home() {
           >
             {[...featured, ...featured, ...featured, ...featured].map((p, i) => (
               <div key={i} className="w-[280px] md:w-[320px] shrink-0 group">
-                <div className="relative aspect-square overflow-hidden bg-card border border-border rounded-sm shadow-sm">
+                <div className="relative aspect-square overflow-hidden bg-card border border-border rounded-2xl shadow-sm">
                   <img
                     src={p.img}
                     alt={p.title}
                     className="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
                   />
-                  <span className="absolute top-4 left-4 text-[10px] tracking-[0.25em] uppercase bg-white/90 backdrop-blur px-3 py-1.5 text-gold rounded-sm font-medium">
+                  <span className="absolute top-4 left-4 badge-gold">
                     {p.tag}
                   </span>
 
@@ -341,7 +337,7 @@ function Home() {
                   <div className="absolute inset-x-4 bottom-4 translate-y-4 opacity-0 group-hover:translate-y-0 group-hover:opacity-100 transition-all duration-300">
                     <button
                       onClick={() => handleOpenQuickConfig(p.shapeId)}
-                      className="w-full bg-gradient-gold text-white py-3 rounded-sm text-[10px] tracking-[0.2em] uppercase font-bold flex items-center justify-center gap-2 shadow-gold cursor-pointer"
+                      className="btn-shine w-full bg-gradient-gold text-white py-3 rounded-full text-[10px] tracking-[0.2em] uppercase font-bold flex items-center justify-center gap-2 shadow-gold cursor-pointer"
                     >
                       Customize Now
                     </button>
@@ -365,9 +361,7 @@ function Home() {
         <div className="max-w-6xl mx-auto px-6 lg:px-10">
           <Reveal>
             <div className="text-center mb-20">
-              <span className="text-[11px] tracking-[0.35em] uppercase text-gold font-medium">
-                The Process
-              </span>
+              <span className="label-chip justify-center mb-4 block">The Process</span>
               <h2 className="font-display text-5xl md:text-6xl mt-4 text-foreground">
                 From <em className="text-gradient-gold not-italic">moment</em> to masterpiece.
               </h2>
@@ -399,9 +393,7 @@ function Home() {
         <div className="max-w-7xl mx-auto px-6 lg:px-10 grid lg:grid-cols-[0.75fr_1.25fr] gap-12 lg:gap-20 items-center">
           <Reveal>
             <div>
-              <span className="text-[11px] tracking-[0.35em] uppercase text-gold font-medium">
-                Full-color 3D Sculptures
-              </span>
+              <span className="label-chip mb-4 block">Full-color 3D Sculptures</span>
               <h2 className="font-display text-5xl md:text-6xl mt-4 leading-[1.05] text-foreground">
                 You. <br />
                 <em className="text-gradient-gold not-italic">In miniature.</em> <br />
@@ -415,13 +407,13 @@ function Home() {
               <div className="mt-8 flex flex-wrap gap-4">
                 <Link
                   to="/sculptures"
-                  className="bg-gradient-gold text-white px-8 py-4 text-[11px] tracking-[0.3em] uppercase rounded-sm shadow-gold font-bold"
+                  className="btn-shine bg-gradient-gold text-white px-8 py-4 text-[11px] tracking-[0.3em] uppercase rounded-full shadow-gold font-bold hover:-translate-y-px transition-all duration-300"
                 >
                   Explore Sculptures
                 </Link>
                 <Link
                   to="/contact"
-                  className="border border-gold/40 px-8 py-4 text-[11px] tracking-[0.3em] uppercase rounded-sm hover:border-gold hover:bg-gold/5 transition text-foreground font-medium"
+                  className="border border-gold/40 px-8 py-4 text-[11px] tracking-[0.3em] uppercase rounded-full hover:border-gold hover:bg-gold/5 transition-all duration-300 text-foreground font-medium"
                 >
                   Book a Scan
                 </Link>
@@ -503,7 +495,7 @@ function Home() {
                     },
                   }}
                   whileHover={{ y: -10 }}
-                  className="relative overflow-hidden rounded-sm group aspect-[4/5] bg-card border border-border shadow-sm"
+                  className="relative overflow-hidden rounded-2xl group aspect-[4/5] bg-card border border-border shadow-sm"
                 >
                   <motion.img
                     src={src}
@@ -547,9 +539,7 @@ function Home() {
           </Reveal>
           <Reveal delay={0.15}>
             <div className="lg:pr-12">
-              <span className="text-[11px] tracking-[0.35em] uppercase text-gold font-bold">
-                Schedule a Scan
-              </span>
+              <span className="label-chip mb-4 block">Schedule a Scan</span>
               <h2 className="font-display text-5xl md:text-7xl mt-4 leading-[1.05] text-foreground">
                 We're coming to <em className="text-gradient-gold not-italic">your city.</em>
               </h2>
@@ -565,7 +555,7 @@ function Home() {
                   { icon: Gift, t: "Sculptures and crystals from one scan" },
                 ].map(({ icon: I, t }) => (
                   <li key={t} className="flex items-center gap-4 group">
-                    <span className="w-10 h-10 grid place-items-center border border-gold/40 rounded-sm group-hover:border-gold bg-white/60 transition-colors">
+                    <span className="w-10 h-10 grid place-items-center border border-gold/40 rounded-xl group-hover:border-gold bg-white/60 transition-colors">
                       <I className="w-4 h-4 text-gold" />
                     </span>
                     <span className="text-foreground/90 font-medium">{t}</span>
@@ -575,7 +565,7 @@ function Home() {
               <div className="mt-10">
                 <Link
                   to="/contact"
-                  className="inline-flex items-center gap-3 bg-gradient-gold text-white px-9 py-4 text-[11px] tracking-[0.3em] uppercase rounded-sm shadow-gold font-bold"
+                  className="btn-shine inline-flex items-center gap-3 bg-gradient-gold text-white px-9 py-4 text-[11px] tracking-[0.3em] uppercase rounded-full shadow-gold font-bold hover:-translate-y-px transition-all duration-300"
                 >
                   Reserve Your Scan <ArrowRight className="w-4 h-4" />
                 </Link>
@@ -590,9 +580,7 @@ function Home() {
         <div className="max-w-6xl mx-auto px-6 lg:px-10">
           <Reveal>
             <div className="text-center mb-16">
-              <span className="text-[11px] tracking-[0.35em] uppercase text-gold font-medium">
-                Loved by thousands
-              </span>
+              <span className="label-chip justify-center mb-4 block">Loved by thousands</span>
               <h2 className="font-display text-5xl md:text-6xl mt-4 text-foreground">
                 Words from the keepers.
               </h2>
@@ -617,7 +605,7 @@ function Home() {
               },
             ].map((t, i) => (
               <Reveal key={i} delay={i * 0.1}>
-                <figure className="bg-card border border-border p-8 h-full flex flex-col rounded-sm hover:border-gold/40 hover:shadow-gold transition-all shadow-sm">
+                <figure className="bg-card border border-border p-8 h-full flex flex-col rounded-2xl hover:border-gold/40 hover:shadow-gold transition-all shadow-sm">
                   <div className="flex gap-0.5 mb-5">
                     {Array.from({ length: 5 }).map((_, i) => (
                       <Star key={i} className="w-3.5 h-3.5 fill-gold text-gold" />
@@ -654,13 +642,13 @@ function Home() {
             <div className="mt-10 flex flex-col sm:flex-row justify-center gap-4">
               <Link
                 to="/shop"
-                className="bg-gradient-gold text-white px-10 py-4 text-[11px] tracking-[0.3em] uppercase rounded-sm shadow-gold font-bold"
+                className="btn-shine bg-gradient-gold text-white px-10 py-4 text-[11px] tracking-[0.3em] uppercase rounded-full shadow-gold font-bold hover:-translate-y-px transition-all duration-300"
               >
                 Start Your Crystal
               </Link>
               <Link
                 to="/contact"
-                className="border border-gold/40 px-10 py-4 text-[11px] tracking-[0.3em] uppercase rounded-sm hover:border-gold hover:bg-gold/5 transition text-foreground font-medium"
+                className="border border-gold/40 px-10 py-4 text-[11px] tracking-[0.3em] uppercase rounded-full hover:border-gold hover:bg-gold/5 transition-all duration-300 text-foreground font-medium"
               >
                 Talk to a Specialist
               </Link>

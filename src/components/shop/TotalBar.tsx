@@ -37,14 +37,14 @@ export function TotalBar({
             Total Price
           </span>
           <span className="font-display text-4xl md:text-5xl text-gold font-bold">
-            $ 0.00
+            ${total.toFixed(2)}
           </span>
         </div>
       </div>
 
       <button
         onClick={handleAddToCart}
-        className="w-full bg-foreground text-background py-5 rounded-sm text-[11px] tracking-[0.4em] uppercase font-bold flex items-center justify-center gap-3 transition-all hover:bg-gold hover:text-primary-foreground active:scale-[0.98]"
+        className="btn-shine w-full bg-gradient-gold text-white py-5 rounded-full text-[11px] tracking-[0.4em] uppercase font-bold flex items-center justify-center gap-3 shadow-gold transition-all duration-300 hover:-translate-y-px hover:shadow-[0_8px_28px_-4px_oklch(0.62_0.14_79/0.55)] active:scale-[0.98]"
       >
         <ShoppingCart className="w-4 h-4" />
         Add to Cart
